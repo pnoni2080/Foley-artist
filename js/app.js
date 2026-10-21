@@ -33,6 +33,7 @@
   const els = {
     video: $('#video'),
     videoFrame: $('#video-frame'),
+    videoStage: $('#video-stage'),
     videoEmpty: $('#video-empty'),
     countdown: $('#countdown'),
     recBadge: $('#rec-badge'),
@@ -350,10 +351,8 @@
           d = 0;
         }
         state.duration = d;
-        if (els.video.videoWidth && els.video.videoHeight) {
-          document.documentElement.style.setProperty('--video-ar', `${els.video.videoWidth} / ${els.video.videoHeight}`);
-        }
         els.videoEmpty.hidden = true;
+        fitVideoFrame();
         if (!opts.keepTracks && state.tracks.length === 0) addTrack();
         fitZoom();
         renderTimeline();
@@ -406,6 +405,28 @@
     state.thumbs = thumbs;
     renderVideoLane();
   }
+
+  /* ---------- 영상 칸을 영상 비율 그대로, 무대 안에서 최대 크기로 ---------- */
+  function fitVideoFrame() {
+    const vw = els.video.videoWidth;
+    const vh = els.video.videoHeight;
+    const stage = els.videoStage.getBoundingClientRect();
+    if (!state.duration || !vw || !vh || !stage.width || !stage.height) {
+      els.videoFrame.style.width = '';
+      els.videoFrame.style.height = '';
+      return;
+    }
+    const ar = vw / vh;
+    let w = stage.width;
+    let h = w / ar;
+    if (h > stage.height) { h = stage.height; w = h * ar; }
+    els.videoFrame.style.width = `${Math.floor(w)}px`;
+    els.videoFrame.style.height = `${Math.floor(h)}px`;
+  }
+  if (window.ResizeObserver) new ResizeObserver(() => fitVideoFrame()).observe(els.videoStage);
+  window.addEventListener('orientationchange', () => setTimeout(fitVideoFrame, 150));
+  document.addEventListener('fullscreenchange', () => setTimeout(fitVideoFrame, 150));
+  document.addEventListener('webkitfullscreenchange', () => setTimeout(fitVideoFrame, 150));
 
   function openVideoPicker() { els.fileInput.click(); }
   els.btnOpenVideo.addEventListener('click', openVideoPicker);
@@ -1384,6 +1405,7 @@
     });
     trackGains.clear();
     els.videoEmpty.hidden = false;
+    fitVideoFrame();
     els.timeDisplay.textContent = '0:00 / 0:00';
     renderTimeline();
     try { await dbDel('current'); } catch (e) { /* 무시 */ }
@@ -1416,7 +1438,7 @@
   // 첫 클릭 때 오디오 엔진 깨우기 (브라우저 자동재생 정책)
   document.addEventListener('pointerdown', () => { if (ctx) ensureAudio(); }, { capture: true });
 
-  window.addEventListener('resize', () => renderTimeline());
+  window.addEventListener('resize', () => { renderTimeline(); fitVideoFrame(); });
 
   /* ---------- 태블릿: 뒤로 가기·새로고침으로 작업이 날아가지 않게 ---------- */
   function armBackTrap() {

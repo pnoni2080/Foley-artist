@@ -34,7 +34,8 @@ body {
   color: var(--text);
   background: var(--bg);
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) 320px;
+  grid-template-rows: auto minmax(0, 1fr) min(320px, 30vh);
+  grid-template-rows: auto minmax(0, 1fr) min(320px, 30dvh);
   grid-template-columns: minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
@@ -82,9 +83,9 @@ input { font: inherit; }
   background: var(--panel);
   border-bottom: 2px solid var(--line);
 }
-.logo { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+.logo { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; white-space: nowrap; }
 .logo-emoji { margin-right: 6px; }
-.topbar-actions { display: flex; gap: 10px; align-items: center; }
+.topbar-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 
 /* ---------- 작업 공간 ---------- */
 .workspace {
@@ -98,9 +99,14 @@ input { font: inherit; }
 
 .video-area { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
 
+/* 영상 무대: 남는 공간 전체. 그 안에서 .video-frame 이 영상 비율 그대로 최대 크기로 놓임 */
+.video-stage {
+  flex: 1; min-height: 0; min-width: 0;
+  display: grid; place-items: center;
+}
 .video-frame {
   position: relative;
-  flex: 1; min-height: 0;
+  width: 100%; height: 100%;        /* 영상이 없을 때는 무대를 다 채움. 영상이 오면 JS가 비율대로 크기를 정함 */
   background: #14161c;
   border-radius: var(--radius);
   overflow: hidden;
@@ -373,13 +379,35 @@ input { font: inherit; }
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 /* ---------- 작은 화면 ---------- */
+/* 낮은 화면(가로로 든 태블릿): 여백과 조작 버튼을 줄여 영상 공간 확보 */
+@media (max-height: 760px) {
+  .topbar { padding: 8px 16px; }
+  .logo { font-size: 20px; }
+  .btn-big { font-size: 17px; padding: 10px 18px; }
+  .workspace { padding: 10px 16px; gap: 10px; }
+  .video-area { gap: 8px; }
+  .transport { padding: 6px 12px; gap: 10px; }
+  .btn-round { width: 48px; height: 48px; font-size: 22px; }
+  .btn-play { width: 56px; height: 56px; font-size: 26px; }
+  .time { font-size: 18px; min-width: 100px; }
+  .record-panel { padding: 12px; gap: 8px; }
+  .record-panel h2 { font-size: 18px; }
+  .record-btn { width: 96px; height: 96px; border-width: 5px; }
+  .record-btn svg { width: 44px; height: 44px; }
+  .record-label { font-size: 16px; }
+  .record-status { min-height: 0; font-size: 14px; }
+  .tips { display: none; }
+  .timeline-toolbar { padding: 6px 16px; }
+  .track-row { height: 64px; }
+  .video-row { height: 52px; }
+}
+
 @media (max-width: 900px) {
-  body { grid-template-rows: auto 1fr 300px; }
+  body { grid-template-rows: auto 1fr min(300px, 34dvh); }
   .topbar { flex-wrap: wrap; }
   .topbar-actions { flex-wrap: wrap; }
   .workspace { grid-template-columns: 1fr; grid-template-rows: auto auto; overflow: auto; }
-  .video-frame { aspect-ratio: var(--video-ar, 16 / 9); max-height: 55vh; width: 100%; flex: 0 0 auto; }
-  .video-frame { max-height: 55dvh; }
+  .video-stage { height: 52vh; height: 52dvh; flex: 0 0 auto; }
   .record-panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .tips { display: none; }
   .record-btn { width: 104px; height: 104px; }
