@@ -43,7 +43,9 @@
 
 마이크는 **https** 또는 **localhost** 에서만 사용할 수 있어요.
 
-- 가장 쉬운 방법: GitHub Pages로 배포 (저장소 Settings → Pages → Branch: main, 폴더: / root)
+- 가장 쉬운 방법: GitHub Pages 자동 배포. 저장소를 **Public**으로 바꾸면 푸시할 때마다
+  `.github/workflows/pages.yml`이 https://pnoni2080.github.io/Foley-artist/ 에 배포합니다.
+  (비공개 저장소의 Pages는 GitHub 유료 플랜에서만 됩니다.)
 - 로컬에서 테스트:
   ```bash
   python3 -m http.server 8000   # 또는 npx serve .
