@@ -51,8 +51,13 @@
       </div>
 
       <div class="transport">
-        <button id="btn-start" class="btn btn-round" title="처음으로">⏮</button>
-        <button id="btn-play" class="btn btn-round btn-play" title="재생">▶</button>
+        <button id="btn-start" class="btn btn-round" title="처음으로" aria-label="처음으로">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h3v14H5zM20 5v14L9 12z"/></svg>
+        </button>
+        <button id="btn-play" class="btn btn-round btn-play" title="재생" aria-label="재생">
+          <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>
+          <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg>
+        </button>
         <div class="time" id="time-display">0:00 / 0:00</div>
         <label class="toggle">
           <input type="checkbox" id="chk-original" checked>
@@ -60,6 +65,11 @@
         </label>
       </div>
     </section>
+
+    <aside class="sound-panel">
+      <h2>🎵 녹음한 소리</h2>
+      <div id="sound-list" class="sound-list"></div>
+    </aside>
 
     <aside class="record-panel">
       <h2>🎤 소리 녹음하기</h2>
@@ -73,11 +83,6 @@
 
       <div class="meter" title="마이크 소리 크기">
         <div id="meter-fill" class="meter-fill"></div>
-      </div>
-
-      <div class="sound-list-wrap">
-        <div class="sound-list-head"><span>🎵 녹음한 소리</span></div>
-        <div id="sound-list" class="sound-list"></div>
       </div>
     </aside>
   </main>

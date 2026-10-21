@@ -50,8 +50,8 @@ body {
   color: var(--text);
   background: var(--bg);
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) min(320px, 30vh);
-  grid-template-rows: auto minmax(0, 1fr) min(320px, 30dvh);
+  grid-template-rows: auto minmax(0, 1fr) min(380px, 36vh);
+  grid-template-rows: auto minmax(0, 1fr) min(380px, 36dvh);
   grid-template-columns: minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
@@ -88,9 +88,17 @@ input { font: inherit; }
 .btn-ghost:hover { background: #e8eef7; }
 .btn-round {
   width: 60px; height: 60px; border-radius: 50%;
-  font-size: 26px; padding: 0; display: grid; place-items: center;
+  padding: 0; display: flex; align-items: center; justify-content: center;
+  color: #3b4a66;
 }
-.btn-play { width: 76px; height: 76px; font-size: 34px; background: var(--blue); color: #fff; box-shadow: 0 4px 0 var(--blue-dark); }
+.btn-round svg { width: 26px; height: 26px; fill: currentColor; display: block; }
+.btn-play { width: 76px; height: 76px; background: var(--blue); color: #fff; box-shadow: 0 4px 0 var(--blue-dark); }
+.btn-play svg { width: 36px; height: 36px; }
+.btn-play .ic-play { margin-left: 4px; }      /* 삼각형은 살짝 오른쪽이 가운데로 보임 */
+.btn-play .ic-pause { display: none; }
+.btn-play.playing .ic-play { display: none; }
+.btn-play.playing .ic-pause { display: block; }
+.btn-play.playing { background: #475569; box-shadow: 0 4px 0 #334155; }
 
 /* ---------- 상단 바 ---------- */
 .topbar {
@@ -106,7 +114,7 @@ input { font: inherit; }
 /* ---------- 작업 공간 ---------- */
 .workspace {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 290px) 230px;
   gap: 16px;
   padding: 16px 20px;
   min-height: 0;
@@ -172,16 +180,27 @@ input { font: inherit; }
 .toggle { margin-left: auto; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; }
 .toggle input { width: 22px; height: 22px; accent-color: var(--blue); }
 
+/* ---------- 소리 목록 패널 ---------- */
+.sound-panel {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 0; min-width: 0;
+}
+.sound-panel h2 { margin: 0; font-size: 20px; flex: 0 0 auto; }
+
 /* ---------- 녹음 패널 ---------- */
 .record-panel {
   background: var(--panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 18px;
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
-  overflow: auto;
+  padding: 18px 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  overflow: auto; min-width: 0;
 }
-.record-panel h2 { margin: 0; font-size: 22px; flex: 0 0 auto; }
+.record-panel h2 { margin: 0; font-size: 20px; flex: 0 0 auto; white-space: nowrap; }
 .record-panel > p { flex: 0 0 auto; }
 .record-target { margin: 0; color: var(--muted); font-size: 16px; text-align: center; }
 .record-target span { color: var(--text); font-weight: 700; }
@@ -223,12 +242,10 @@ input { font: inherit; }
 .meter-fill {
   height: 100%; width: 0%;
   background: linear-gradient(90deg, var(--green), var(--yellow) 70%, var(--red));
-  transition: width 0.06s linear;
+  transition: width 0.04s linear;
 }
 
-.sound-list-wrap { width: 100%; display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; }
-.sound-list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-weight: 900; font-size: 16px; }
-.sound-list { display: flex; flex-direction: column; gap: 6px; overflow: auto; min-height: 0; }
+.sound-list { display: flex; flex-direction: column; gap: 8px; overflow: auto; min-height: 0; flex: 1 1 auto; }
 .sound-item {
   display: flex; align-items: center; gap: 8px;
   padding: 6px 8px; border-radius: 12px;
@@ -239,7 +256,8 @@ input { font: inherit; }
 .sound-item.selected { border-color: var(--blue); background: #e6f0ff; }
 .sound-item.placed { opacity: 0.9; }
 .sound-swatch { width: 26px; height: 26px; border-radius: 8px; flex: 0 0 auto; border: 2px solid rgba(0,0,0,0.12); }
-.sound-name { flex: 1; min-width: 0; font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sound-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.sound-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sound-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .sound-btn { border: none; background: #fff; width: 34px; height: 34px; border-radius: 10px; font-size: 15px; padding: 0; flex: 0 0 auto; box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
 .track-row.can-drop .lane { background-color: #e6f0ff; }
@@ -291,7 +309,7 @@ input { font: inherit; }
 .thumb { position: absolute; top: 0; height: 100%; object-fit: cover; opacity: 0.9; border-right: 1px solid rgba(255,255,255,0.15); }
 .video-label { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: #fff; font-size: 14px; pointer-events: none; text-shadow: 0 1px 3px #000; }
 
-.track-row { height: 76px; }
+.track-row { height: 88px; }
 .track-row.drop-target .lane { background-color: #fff7cc; }
 .track-head.selected { background: #e6f0ff; box-shadow: inset 4px 0 0 var(--blue); }
 .icon-btn { border: none; background: #f1f5fb; width: 44px; height: 44px; border-radius: 12px; font-size: 24px; padding: 0; flex: 0 0 auto; }
@@ -435,13 +453,14 @@ input { font: inherit; }
 }
 
 @media (max-width: 900px) {
-  body { grid-template-rows: auto 1fr min(300px, 34dvh); }
+  body { grid-template-rows: auto 1fr min(340px, 36dvh); }
   .topbar { flex-wrap: wrap; }
   .topbar-actions { flex-wrap: wrap; }
-  .workspace { grid-template-columns: 1fr; grid-template-rows: auto auto; overflow: auto; }
-  .video-stage { height: 52vh; height: 52dvh; flex: 0 0 auto; }
-  .record-panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-  .sound-list-wrap { flex: 1 1 200px; }
+  .workspace { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; align-content: start; overflow: auto; }
+  .video-area { grid-column: 1 / -1; min-height: auto; }
+  .video-stage { height: auto; flex: 0 0 auto; }
+  .sound-panel { min-height: 180px; max-height: 300px; }
+  .record-panel { min-height: 180px; }
   .record-btn { width: 104px; height: 104px; }
   .record-btn svg { width: 48px; height: 48px; }
   .logo { font-size: 20px; }
@@ -485,8 +504,13 @@ input { font: inherit; }
       </div>
 
       <div class="transport">
-        <button id="btn-start" class="btn btn-round" title="처음으로">⏮</button>
-        <button id="btn-play" class="btn btn-round btn-play" title="재생">▶</button>
+        <button id="btn-start" class="btn btn-round" title="처음으로" aria-label="처음으로">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h3v14H5zM20 5v14L9 12z"/></svg>
+        </button>
+        <button id="btn-play" class="btn btn-round btn-play" title="재생" aria-label="재생">
+          <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>
+          <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg>
+        </button>
         <div class="time" id="time-display">0:00 / 0:00</div>
         <label class="toggle">
           <input type="checkbox" id="chk-original" checked>
@@ -494,6 +518,11 @@ input { font: inherit; }
         </label>
       </div>
     </section>
+
+    <aside class="sound-panel">
+      <h2>🎵 녹음한 소리</h2>
+      <div id="sound-list" class="sound-list"></div>
+    </aside>
 
     <aside class="record-panel">
       <h2>🎤 소리 녹음하기</h2>
@@ -507,11 +536,6 @@ input { font: inherit; }
 
       <div class="meter" title="마이크 소리 크기">
         <div id="meter-fill" class="meter-fill"></div>
-      </div>
-
-      <div class="sound-list-wrap">
-        <div class="sound-list-head"><span>🎵 녹음한 소리</span></div>
-        <div id="sound-list" class="sound-list"></div>
       </div>
     </aside>
   </main>
@@ -2954,7 +2978,7 @@ var qrcode = function() {
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-12';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.21-13';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -3267,8 +3291,9 @@ var qrcode = function() {
   }
 
   function updatePlayBtn() {
-    els.btnPlay.textContent = state.playing ? '⏸' : '▶';
+    els.btnPlay.classList.toggle('playing', state.playing);
     els.btnPlay.title = state.playing ? '멈춤' : '재생';
+    els.btnPlay.setAttribute('aria-label', els.btnPlay.title);
   }
 
   els.video.addEventListener('playing', () => {
@@ -3407,15 +3432,17 @@ var qrcode = function() {
     const vw = els.video.videoWidth;
     const vh = els.video.videoHeight;
     const stage = els.videoStage.getBoundingClientRect();
-    if (!state.duration || !vw || !vh || !stage.width || !stage.height) {
+    if (!state.duration || !vw || !vh || !stage.width) {
       els.videoFrame.style.width = '';
       els.videoFrame.style.height = '';
       return;
     }
     const ar = vw / vh;
+    const stacked = window.matchMedia('(max-width: 900px)').matches; // 세로/좁은 화면: 위아래로 쌓인 배치
     let w = stage.width;
     let h = w / ar;
-    if (h > stage.height) { h = stage.height; w = h * ar; }
+    const maxH = stacked ? window.innerHeight * 0.48 : stage.height;
+    if (h > maxH) { h = maxH; w = h * ar; }
     els.videoFrame.style.width = `${Math.floor(w)}px`;
     els.videoFrame.style.height = `${Math.floor(h)}px`;
   }
@@ -3605,7 +3632,10 @@ var qrcode = function() {
       del.textContent = '🗑';
       del.title = '목록에서 지우기';
       del.addEventListener('click', (e) => { e.stopPropagation(); deleteSound(sound.id); });
-      item.append(sw, name, meta, play, del);
+      const text = document.createElement('div');
+      text.className = 'sound-text';
+      text.append(name, meta);
+      item.append(sw, text, play, del);
       item.addEventListener('click', () => selectSound(sound.id));
       els.soundList.appendChild(item);
     }
@@ -4093,14 +4123,21 @@ var qrcode = function() {
   function startMeter() {
     if (!analyser) return;
     const data = new Uint8Array(analyser.fftSize);
+    let shown = 0;
     const loop = () => {
       analyser.getByteTimeDomainData(data);
       let max = 0;
+      let sum = 0;
       for (let i = 0; i < data.length; i++) {
         const v = Math.abs(data[i] - 128) / 128;
         if (v > max) max = v;
+        sum += v * v;
       }
-      els.meterFill.style.width = `${Math.min(100, max * 140)}%`;
+      const rms = Math.sqrt(sum / data.length);
+      // 작은 소리도 보이게 제곱근 곡선으로 키우고, 올라갈 땐 바로, 내려갈 땐 천천히
+      const target = Math.min(1, Math.sqrt(Math.max(max * 0.6, rms * 2.2)) * 1.25);
+      shown = target > shown ? target : shown * 0.85 + target * 0.15;
+      els.meterFill.style.width = `${Math.round(shown * 100)}%`;
       meterRaf = requestAnimationFrame(loop);
     };
     loop();
@@ -4141,7 +4178,7 @@ var qrcode = function() {
       const micSrc = ctx.createMediaStreamSource(meterStream);
       analyser = ctx.createAnalyser();
       analyser.fftSize = 512;
-      analyser.smoothingTimeConstant = 0.6;
+      analyser.smoothingTimeConstant = 0.2;
       const silent = ctx.createGain();
       silent.gain.value = 0;
       micSrc.connect(analyser);

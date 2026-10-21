@@ -17,7 +17,7 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-12';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.21-13';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -330,8 +330,9 @@
   }
 
   function updatePlayBtn() {
-    els.btnPlay.textContent = state.playing ? '⏸' : '▶';
+    els.btnPlay.classList.toggle('playing', state.playing);
     els.btnPlay.title = state.playing ? '멈춤' : '재생';
+    els.btnPlay.setAttribute('aria-label', els.btnPlay.title);
   }
 
   els.video.addEventListener('playing', () => {
@@ -470,15 +471,17 @@
     const vw = els.video.videoWidth;
     const vh = els.video.videoHeight;
     const stage = els.videoStage.getBoundingClientRect();
-    if (!state.duration || !vw || !vh || !stage.width || !stage.height) {
+    if (!state.duration || !vw || !vh || !stage.width) {
       els.videoFrame.style.width = '';
       els.videoFrame.style.height = '';
       return;
     }
     const ar = vw / vh;
+    const stacked = window.matchMedia('(max-width: 900px)').matches; // 세로/좁은 화면: 위아래로 쌓인 배치
     let w = stage.width;
     let h = w / ar;
-    if (h > stage.height) { h = stage.height; w = h * ar; }
+    const maxH = stacked ? window.innerHeight * 0.48 : stage.height;
+    if (h > maxH) { h = maxH; w = h * ar; }
     els.videoFrame.style.width = `${Math.floor(w)}px`;
     els.videoFrame.style.height = `${Math.floor(h)}px`;
   }
@@ -668,7 +671,10 @@
       del.textContent = '🗑';
       del.title = '목록에서 지우기';
       del.addEventListener('click', (e) => { e.stopPropagation(); deleteSound(sound.id); });
-      item.append(sw, name, meta, play, del);
+      const text = document.createElement('div');
+      text.className = 'sound-text';
+      text.append(name, meta);
+      item.append(sw, text, play, del);
       item.addEventListener('click', () => selectSound(sound.id));
       els.soundList.appendChild(item);
     }
@@ -1156,14 +1162,21 @@
   function startMeter() {
     if (!analyser) return;
     const data = new Uint8Array(analyser.fftSize);
+    let shown = 0;
     const loop = () => {
       analyser.getByteTimeDomainData(data);
       let max = 0;
+      let sum = 0;
       for (let i = 0; i < data.length; i++) {
         const v = Math.abs(data[i] - 128) / 128;
         if (v > max) max = v;
+        sum += v * v;
       }
-      els.meterFill.style.width = `${Math.min(100, max * 140)}%`;
+      const rms = Math.sqrt(sum / data.length);
+      // 작은 소리도 보이게 제곱근 곡선으로 키우고, 올라갈 땐 바로, 내려갈 땐 천천히
+      const target = Math.min(1, Math.sqrt(Math.max(max * 0.6, rms * 2.2)) * 1.25);
+      shown = target > shown ? target : shown * 0.85 + target * 0.15;
+      els.meterFill.style.width = `${Math.round(shown * 100)}%`;
       meterRaf = requestAnimationFrame(loop);
     };
     loop();
@@ -1204,7 +1217,7 @@
       const micSrc = ctx.createMediaStreamSource(meterStream);
       analyser = ctx.createAnalyser();
       analyser.fftSize = 512;
-      analyser.smoothingTimeConstant = 0.6;
+      analyser.smoothingTimeConstant = 0.2;
       const silent = ctx.createGain();
       silent.gain.value = 0;
       micSrc.connect(analyser);
