@@ -22,7 +22,6 @@
   <header class="topbar">
     <div class="logo"><span class="logo-emoji">🎬🔊</span> 폴리 아티스트</div>
     <div class="topbar-actions">
-      <button id="student-badge" class="btn btn-ghost student-badge" title="내 이름 바꾸기">👤 <span id="student-name">이름</span></button>
       <button id="btn-open-video" class="btn btn-big btn-blue">🎬 영상 가져오기</button>
       <button id="btn-send" class="btn btn-big btn-green">📤 패들렛에 올리기</button>
       <button id="btn-export" class="btn btn-big">💾 내 기기에 저장</button>
@@ -63,9 +62,11 @@
       <h2>🎤 소리 녹음하기</h2>
       <p class="record-target">녹음할 트랙: <span id="record-target">트랙을 골라요</span></p>
 
-      <button id="btn-record" class="record-btn" title="녹음">
-        <span class="mic">🎤</span>
+      <button id="btn-record" class="record-btn" title="녹음" aria-label="녹음">
+        <svg class="mic-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4z"/><path d="M19 11a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 0 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/></svg>
+        <svg class="stop-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg>
       </button>
+      <p id="record-label" class="record-label">녹음</p>
       <p id="record-status" class="record-status">버튼을 누르면 3초 뒤에 녹음이 시작돼요</p>
 
       <div class="meter" title="마이크 소리 크기">
@@ -75,7 +76,7 @@
       <div class="tips">
         <div class="tip">1️⃣ 영상을 가져와요</div>
         <div class="tip">2️⃣ 🎤 버튼을 누르고 영상을 보며 소리를 내요</div>
-        <div class="tip">3️⃣ 다시 🎤 버튼을 누르면 녹음 끝!</div>
+        <div class="tip">3️⃣ 멈춤 버튼을 누르면 녹음 끝!</div>
         <div class="tip">4️⃣ ▶ 재생해서 들어 봐요</div>
       </div>
     </aside>
@@ -163,17 +164,6 @@
     </div>
   </div>
 
-  <!-- 내 이름 -->
-  <div class="modal" id="name-modal" hidden>
-    <div class="modal-box">
-      <p class="modal-text">👤 내 이름(또는 번호)을 적어요</p>
-      <input id="name-input" class="big-input" type="text" maxlength="12" placeholder="예: 3번 지우" autocomplete="off">
-      <div class="modal-btns">
-        <button id="name-ok" class="btn btn-big btn-blue">좋아요</button>
-      </div>
-    </div>
-  </div>
-
   <!-- 패들렛에 올리기 안내 -->
   <div class="modal" id="padlet-modal" hidden>
     <div class="modal-box padlet-box">
@@ -181,7 +171,7 @@
       <ol class="steps">
         <li><b>패들렛</b>을 열어요</li>
         <li><b>➕</b> 버튼을 누르고 <b>파일 올리기</b>를 골라요</li>
-        <li>방금 만든 <b>폴리아티스트_<span id="padlet-filename">이름</span></b> 파일을 골라요</li>
+        <li>방금 만든 <b>폴리아티스트_작품</b> 파일을 골라요</li>
       </ol>
       <div class="padlet-btns">
         <button id="padlet-share" class="btn btn-big btn-green" hidden>📲 패들렛 앱으로 보내기</button>

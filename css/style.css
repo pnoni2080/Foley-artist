@@ -157,28 +157,41 @@ input { font: inherit; }
   display: flex; flex-direction: column; align-items: center; gap: 12px;
   overflow: auto;
 }
-.record-panel h2 { margin: 0; font-size: 22px; }
+.record-panel h2 { margin: 0; font-size: 22px; flex: 0 0 auto; }
+.record-panel > p { flex: 0 0 auto; }
 .record-target { margin: 0; color: var(--muted); font-size: 16px; text-align: center; }
 .record-target span { color: var(--text); font-weight: 700; }
 
 .record-btn {
-  width: 150px; height: 150px; border-radius: 50%;
-  border: none;
-  background: radial-gradient(circle at 35% 30%, #ff7b7b, var(--red) 60%, var(--red-dark));
-  box-shadow: 0 8px 0 #b91c1c, 0 12px 24px rgba(239,68,68,0.35);
-  display: grid; place-items: center;
-  transition: transform 0.1s ease;
+  width: 140px; height: 140px; border-radius: 50%;
+  border: 6px solid #fff;
+  background: var(--red);
+  box-shadow: 0 0 0 4px #fecaca, 0 8px 22px rgba(239, 68, 68, 0.35);
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;                      /* 패널이 낮아도 찌그러지지 않게 */
+  padding: 0; position: relative;
+  transition: transform 0.12s ease, background 0.2s ease;
 }
-.record-btn .mic { font-size: 72px; line-height: 1; filter: drop-shadow(0 3px 2px rgba(0,0,0,0.3)); }
-.record-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #b91c1c; }
+.record-btn:hover { background: #f05252; }
+.record-btn:active { transform: scale(0.94); }
+.record-btn svg { width: 64px; height: 64px; fill: #fff; display: block; }
+.record-btn .stop-icon { display: none; }
 .record-btn.armed { animation: pulse 1s ease-in-out infinite; }
 .record-btn.recording {
-  background: radial-gradient(circle at 35% 30%, #8d9bb5, #4b5a75 60%, #2f3a4f);
-  box-shadow: 0 8px 0 #1f2838;
-  animation: pulse 0.8s ease-in-out infinite;
+  background: #1f2937;
+  animation: ring 1.2s ease-out infinite;
 }
-.record-btn.recording .mic::after { content: ""; }
-@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.record-btn.recording .mic-icon { display: none; }
+.record-btn.recording .stop-icon { display: block; fill: var(--red); }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 4px #fecaca, 0 0 0 8px rgba(239, 68, 68, 0.45); }
+  100% { box-shadow: 0 0 0 4px #fecaca, 0 0 0 26px rgba(239, 68, 68, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .record-btn.armed, .record-btn.recording, .rec-badge, .countdown { animation: none; }
+}
+.record-label { margin: 2px 0 0; font-size: 20px; font-weight: 900; }
 
 .record-status { margin: 0; text-align: center; font-size: 16px; color: var(--muted); min-height: 44px; }
 
@@ -319,13 +332,6 @@ input { font: inherit; }
 .qr-code svg { width: min(60vw, 320px); height: auto; }
 .qr-url-label { font-size: 14px; color: var(--muted); align-self: flex-start; }
 .qr-url { width: 100%; font-size: 15px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; -webkit-user-select: text; user-select: text; }
-.student-badge { font-size: 18px; color: var(--text); background: #fff3c4; }
-.big-input {
-  width: 100%; font-size: 26px; font-weight: 700; text-align: center;
-  padding: 14px 16px; border: 3px solid var(--line); border-radius: 16px;
-  -webkit-user-select: text; user-select: text;
-}
-.big-input:focus { outline: none; border-color: var(--blue); }
 .padlet-box { max-width: 480px; }
 .steps { margin: 0; padding-left: 26px; font-size: 18px; line-height: 1.8; align-self: stretch; }
 .padlet-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; }
@@ -353,8 +359,8 @@ input { font: inherit; }
   .workspace { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
   .record-panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .tips { display: none; }
-  .record-btn { width: 110px; height: 110px; }
-  .record-btn .mic { font-size: 54px; }
+  .record-btn { width: 104px; height: 104px; }
+  .record-btn svg { width: 48px; height: 48px; }
   .logo { font-size: 20px; }
   .btn-big { font-size: 16px; padding: 10px 16px; }
 }

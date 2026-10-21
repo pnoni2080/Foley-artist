@@ -56,14 +56,9 @@
     qrCode: $('#qr-code'),
     qrUrl: $('#qr-url'),
     qrClose: $('#qr-close'),
-    studentBadge: $('#student-badge'),
-    studentName: $('#student-name'),
     btnSend: $('#btn-send'),
-    nameModal: $('#name-modal'),
-    nameInput: $('#name-input'),
-    nameOk: $('#name-ok'),
+    recordLabel: $('#record-label'),
     padletModal: $('#padlet-modal'),
-    padletFilename: $('#padlet-filename'),
     padletShare: $('#padlet-share'),
     padletOpen: $('#padlet-open'),
     padletSave: $('#padlet-save'),
@@ -855,11 +850,11 @@
   function setRecordUI(mode) {
     els.btnRecord.classList.toggle('armed', mode === 'armed');
     els.btnRecord.classList.toggle('recording', mode === 'recording');
-    els.btnRecord.querySelector('.mic').textContent = mode === 'recording' ? '⏹' : '🎤';
+    els.recordLabel.textContent = mode === 'recording' ? '멈춤' : (mode === 'armed' ? '준비…' : '녹음');
     els.recBadge.hidden = mode !== 'recording';
     if (mode === 'idle') els.recordStatus.textContent = '버튼을 누르면 3초 뒤에 녹음이 시작돼요';
     if (mode === 'armed') els.recordStatus.textContent = '준비! 곧 녹음이 시작돼요 🙌';
-    if (mode === 'recording') els.recordStatus.textContent = '녹음 중! 영상을 보면서 소리를 내요. 끝나면 ⏹ 버튼을 눌러요';
+    if (mode === 'recording') els.recordStatus.textContent = '녹음 중! 영상을 보면서 소리를 내요. 끝나면 멈춤 버튼을 눌러요';
   }
 
   function startMeter() {
@@ -1094,7 +1089,7 @@
     if (result.cancelled) { toast('저장을 그만뒀어요'); return; }
     const a = document.createElement('a');
     a.href = URL.createObjectURL(result.blob);
-    a.download = `폴리아티스트_${studentName() || '작품'}.${result.ext}`;
+    a.download = `폴리아티스트_작품.${result.ext}`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -1104,42 +1099,15 @@
 
   els.btnExport.addEventListener('click', exportProject);
 
-  /* ---------- 학생 이름 / 패들렛 주소 ---------- */
-  const LS_NAME = 'foley.studentName';
+  /* ---------- 패들렛 주소 ---------- */
   const LS_PADLET = 'foley.padletUrl';
   const lsGet = (k) => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* 무시 */ } };
 
-  function studentName() { return lsGet(LS_NAME); }
   function padletUrl() {
     const u = lsGet(LS_PADLET);
     return /^https:\/\//i.test(u) ? u : '';
   }
-
-  function updateStudentBadge() {
-    els.studentName.textContent = studentName() || '이름 적기';
-  }
-
-  function askName() {
-    return new Promise((resolve) => {
-      els.nameInput.value = studentName();
-      els.nameModal.hidden = false;
-      setTimeout(() => els.nameInput.focus(), 50);
-      const done = () => {
-        const v = els.nameInput.value.trim().slice(0, 12);
-        if (!v) { els.nameInput.focus(); return; }
-        lsSet(LS_NAME, v);
-        els.nameModal.hidden = true;
-        els.nameOk.onclick = null;
-        updateStudentBadge();
-        resolve(v);
-      };
-      els.nameOk.onclick = done;
-      els.nameInput.onkeydown = (e) => { if (e.key === 'Enter') done(); };
-    });
-  }
-
-  els.studentBadge.addEventListener('click', () => askName());
 
   // 주소에 ?padlet=... 이 있으면 저장 (선생님 QR로 들어온 경우)
   try {
@@ -1149,10 +1117,6 @@
 
   /* ---------- 패들렛에 올리기 ---------- */
   let lastFile = null;
-
-  function safeFileName(name) {
-    return (name || '작품').replace(/[\\/:*?"<>|]+/g, '').trim() || '작품';
-  }
 
   function downloadFile(file) {
     const a = document.createElement('a');
@@ -1166,7 +1130,6 @@
 
   async function sendToPadlet() {
     if (!canRender()) return;
-    const name = studentName() || await askName();
 
     els.sendText.textContent = '🎬 작품을 만드는 중이에요… 영상이 끝날 때까지 기다려요';
     els.sendProgress.style.width = '0%';
@@ -1178,7 +1141,7 @@
     els.sendOverlay.hidden = true;
     if (result.cancelled) { toast('그만뒀어요'); return; }
 
-    const fileName = `폴리아티스트_${safeFileName(name)}.${result.ext}`;
+    const fileName = `폴리아티스트_작품.${result.ext}`;
     lastFile = new File([result.blob], fileName, { type: result.blob.type || 'video/webm' });
 
     // 공유 시트(패들렛 앱 등)를 쓸 수 있는지
@@ -1189,7 +1152,6 @@
     if (!canShare) downloadFile(lastFile);
 
     const url = padletUrl();
-    els.padletFilename.textContent = safeFileName(name);
     els.padletShare.hidden = !canShare;
     els.padletOpen.hidden = !url;
     if (url) els.padletOpen.href = url;
@@ -1328,7 +1290,7 @@
     const tag = (e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
     if (!els.modal.hidden || !els.exportOverlay.hidden || !els.iconModal.hidden || !els.qrModal.hidden
-      || !els.nameModal.hidden || !els.padletModal.hidden || !els.sendOverlay.hidden) return;
+      || !els.padletModal.hidden || !els.sendOverlay.hidden) return;
     if (e.code === 'Space') {
       e.preventDefault();
       if (state.recording) stopRecording();
@@ -1377,6 +1339,5 @@
 
   /* ---------- 시작 ---------- */
   renderTimeline();
-  updateStudentBadge();
   restoreProject();
 })();
