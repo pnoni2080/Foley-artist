@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    // 구글 등으로 로그인한 사람 = 선생님, 익명 로그인 = 학생
+    function isTeacher() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
+    match /classes/{code} {
+      allow read: if signedIn();
+      allow create: if isTeacher() && request.resource.data.ownerUid == request.auth.uid;
+      allow update, delete: if isTeacher() && resource.data.ownerUid == request.auth.uid;
+
+      match /works/{workId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 20;
+        allow update: if false;
+        allow delete: if isTeacher()
+          && get(/databases/$(database)/documents/classes/$(code)).data.ownerUid == request.auth.uid;
+      }
+    }
+  }
+}

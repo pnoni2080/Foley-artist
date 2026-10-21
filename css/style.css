@@ -319,6 +319,16 @@ input { font: inherit; }
 .qr-code svg { width: min(60vw, 320px); height: auto; }
 .qr-url-label { font-size: 14px; color: var(--muted); align-self: flex-start; }
 .qr-url { width: 100%; font-size: 15px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; -webkit-user-select: text; user-select: text; }
+.student-badge { font-size: 18px; color: var(--text); background: #fff3c4; }
+.big-input {
+  width: 100%; font-size: 26px; font-weight: 700; text-align: center;
+  padding: 14px 16px; border: 3px solid var(--line); border-radius: 16px;
+  -webkit-user-select: text; user-select: text;
+}
+.big-input:focus { outline: none; border-color: var(--blue); }
+.code-input { letter-spacing: 8px; text-transform: uppercase; font-size: 36px; }
+.input-error { margin: 0; color: var(--red-dark); font-weight: 700; }
+.send-result { font-size: 64px; line-height: 1; }
 .progress { width: 100%; height: 20px; background: #e8eef7; border-radius: 999px; overflow: hidden; }
 .progress-fill { height: 100%; width: 0%; background: var(--green); transition: width 0.2s linear; }
 

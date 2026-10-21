@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <title>폴리 아티스트 - 발표 화면</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/present.css">
+</head>
+<body class="present-body">
+
+  <header class="topbar">
+    <div class="logo"><span class="logo-emoji">🎬🔊</span> 폴리 아티스트 <span class="logo-sub">발표 화면</span></div>
+    <div class="topbar-actions" id="teacher-actions" hidden>
+      <label class="class-pick">교실
+        <select id="class-select" class="class-select"></select>
+      </label>
+      <button id="btn-new-class" class="btn btn-small btn-blue">➕ 새 교실 만들기</button>
+      <button id="btn-class-qr" class="btn btn-small">📱 학생 접속 QR</button>
+      <button id="btn-fullscreen" class="btn btn-small" title="전체 화면">⛶ 전체 화면</button>
+      <button id="btn-signout" class="btn btn-ghost">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="present-main">
+    <!-- 설정 안 됨 -->
+    <section id="setup-view" class="center-view" hidden>
+      <div class="big-emoji">🔧</div>
+      <p class="empty-title">Firebase 설정이 아직 없어요</p>
+      <p class="muted">js/firebase-config.js 파일에 Firebase 설정을 넣으면 발표 화면이 켜져요.<br>자세한 순서는 README의 "선생님께 보내기 설정"을 보세요.</p>
+    </section>
+
+    <!-- 로그인 -->
+    <section id="login-view" class="center-view" hidden>
+      <div class="big-emoji">👩‍🏫</div>
+      <p class="empty-title">선생님 로그인</p>
+      <p class="muted">학생들이 보낸 작품을 보려면 구글 계정으로 로그인해요</p>
+      <button id="btn-google" class="btn btn-big btn-blue">구글로 로그인</button>
+      <p id="login-error" class="input-error" hidden></p>
+    </section>
+
+    <!-- 작품 목록 -->
+    <section id="works-view" hidden>
+      <div class="works-header">
+        <div class="class-info">
+          교실 코드 <b id="class-code-big" class="class-code-big">----</b>
+          <span class="muted">· 작품 <span id="work-count">0</span>개</span>
+        </div>
+        <div class="works-tools">
+          <button id="btn-play-all" class="btn btn-small btn-green">▶ 처음부터 차례로 보기</button>
+          <button id="btn-delete-all" class="btn btn-small btn-red">🗑 전체 지우기</button>
+        </div>
+      </div>
+      <div id="works-grid" class="works-grid"></div>
+      <div id="works-empty" class="center-view" hidden>
+        <div class="big-emoji">📭</div>
+        <p class="empty-title">아직 보낸 작품이 없어요</p>
+        <p class="muted">학생이 "선생님께 보내기"를 누르면 바로 여기에 나타나요.<br>학생 접속 QR을 화면에 띄워 주세요.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 재생 화면 -->
+  <div id="player" class="player" hidden>
+    <video id="player-video" playsinline controls></video>
+    <div class="player-bar">
+      <div class="player-name" id="player-name"></div>
+      <div class="player-btns">
+        <button id="player-prev" class="btn btn-big">◀ 이전</button>
+        <button id="player-replay" class="btn btn-big btn-blue">🔁 다시</button>
+        <button id="player-next" class="btn btn-big">다음 ▶</button>
+        <button id="player-close" class="btn btn-big btn-ghost">✕ 닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 학생 접속 QR -->
+  <div class="modal" id="qr-modal" hidden>
+    <div class="modal-box qr-box">
+      <p class="modal-text">📱 QR을 찍으면 바로 우리 교실로 들어와요</p>
+      <div id="qr-code" class="qr-code"></div>
+      <p class="qr-code-text">교실 코드 <b id="qr-class-code" class="class-code-big">----</b></p>
+      <label class="qr-url-label" for="qr-url">주소</label>
+      <input id="qr-url" class="qr-url" type="text" readonly spellcheck="false">
+      <div class="modal-btns">
+        <button id="qr-close" class="btn btn-big btn-blue">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 물어보기 -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box">
+      <p id="modal-text" class="modal-text"></p>
+      <div class="modal-btns">
+        <button id="modal-ok" class="btn btn-big btn-blue">네</button>
+        <button id="modal-cancel" class="btn btn-big btn-ghost">아니요</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast toast-top" hidden></div>
+
+  <script src="js/vendor/qrcode.js"></script>
+  <script src="js/vendor/firebase/firebase-app-compat.js"></script>
+  <script src="js/vendor/firebase/firebase-auth-compat.js"></script>
+  <script src="js/vendor/firebase/firebase-firestore-compat.js"></script>
+  <script src="js/vendor/firebase/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/cloud.js"></script>
+  <script src="js/present.js"></script>
+</body>
+</html>
