@@ -62,16 +62,18 @@
     nameModal: $('#name-modal'),
     nameInput: $('#name-input'),
     nameOk: $('#name-ok'),
-    codeModal: $('#code-modal'),
-    codeInput: $('#code-input'),
-    codeError: $('#code-error'),
-    codeOk: $('#code-ok'),
-    codeCancel: $('#code-cancel'),
+    padletModal: $('#padlet-modal'),
+    padletFilename: $('#padlet-filename'),
+    padletShare: $('#padlet-share'),
+    padletOpen: $('#padlet-open'),
+    padletSave: $('#padlet-save'),
+    padletNolink: $('#padlet-nolink'),
+    padletClose: $('#padlet-close'),
     sendOverlay: $('#send-overlay'),
     sendText: $('#send-text'),
     sendProgress: $('#send-progress'),
     sendCancel: $('#send-cancel'),
-    sendDone: $('#send-done'),
+    qrPadlet: $('#qr-padlet'),
     btnZoomIn: $('#btn-zoom-in'),
     btnZoomOut: $('#btn-zoom-out'),
     tlScroll: $('#timeline-scroll'),
@@ -552,8 +554,16 @@
   els.iconCancel.addEventListener('click', () => { els.iconModal.hidden = true; });
 
   /* ---------- 접속 QR ---------- */
+  function qrTargetUrl() {
+    const base = els.qrUrl.value.trim();
+    const padlet = els.qrPadlet.value.trim();
+    if (!base) return '';
+    if (!padlet) return base;
+    const sep = base.includes('?') ? '&' : '?';
+    return `${base}${sep}padlet=${encodeURIComponent(padlet)}`;
+  }
   function renderQr() {
-    const url = els.qrUrl.value.trim();
+    const url = qrTargetUrl();
     els.qrCode.innerHTML = '';
     if (!url || typeof qrcode !== 'function') return;
     try {
@@ -566,11 +576,13 @@
     }
   }
   els.btnQr.addEventListener('click', () => {
-    if (!els.qrUrl.value) els.qrUrl.value = location.href.split('#')[0];
+    if (!els.qrUrl.value) els.qrUrl.value = location.href.split('#')[0].split('?')[0];
+    if (!els.qrPadlet.value) els.qrPadlet.value = padletUrl();
     renderQr();
     els.qrModal.hidden = false;
   });
   els.qrUrl.addEventListener('input', renderQr);
+  els.qrPadlet.addEventListener('input', () => { lsSet(LS_PADLET, els.qrPadlet.value.trim()); renderQr(); });
   els.qrClose.addEventListener('click', () => { els.qrModal.hidden = true; });
 
   /* ---------- 타임라인 그리기 ---------- */
@@ -1092,19 +1104,19 @@
 
   els.btnExport.addEventListener('click', exportProject);
 
-  /* ---------- 학생 이름 / 교실 코드 ---------- */
+  /* ---------- 학생 이름 / 패들렛 주소 ---------- */
   const LS_NAME = 'foley.studentName';
-  const LS_CODE = 'foley.classCode';
+  const LS_PADLET = 'foley.padletUrl';
   const lsGet = (k) => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* 무시 */ } };
 
   function studentName() { return lsGet(LS_NAME); }
-  function classCode() { return lsGet(LS_CODE); }
+  function padletUrl() {
+    const u = lsGet(LS_PADLET);
+    return /^https:\/\//i.test(u) ? u : '';
+  }
 
   function updateStudentBadge() {
-    const cloudOn = window.FoleyCloud && FoleyCloud.available;
-    els.btnSend.hidden = !cloudOn;
-    els.studentBadge.hidden = !cloudOn;
     els.studentName.textContent = studentName() || '이름 적기';
   }
 
@@ -1127,95 +1139,76 @@
     });
   }
 
-  function askCode() {
-    return new Promise((resolve) => {
-      els.codeInput.value = classCode();
-      els.codeError.hidden = true;
-      els.codeModal.hidden = false;
-      setTimeout(() => els.codeInput.focus(), 50);
-      const close = (v) => {
-        els.codeModal.hidden = true;
-        els.codeOk.onclick = null;
-        els.codeCancel.onclick = null;
-        resolve(v);
-      };
-      els.codeOk.onclick = async () => {
-        const code = FoleyCloud.normalizeCode(els.codeInput.value);
-        if (!code) { els.codeInput.focus(); return; }
-        els.codeOk.disabled = true;
-        let cls = null;
-        try { await FoleyCloud.signInAnon(); cls = await FoleyCloud.getClass(code); } catch (e) { console.warn(e); }
-        els.codeOk.disabled = false;
-        if (!cls) { els.codeError.hidden = false; els.codeInput.select(); return; }
-        lsSet(LS_CODE, code);
-        close(code);
-      };
-      els.codeCancel.onclick = () => close('');
-      els.codeInput.onkeydown = (e) => { if (e.key === 'Enter') els.codeOk.onclick(); };
-    });
-  }
-
   els.studentBadge.addEventListener('click', () => askName());
 
-  // 주소에 ?code=ABCD 가 있으면 교실 코드로 저장 (QR로 들어온 경우)
+  // 주소에 ?padlet=... 이 있으면 저장 (선생님 QR로 들어온 경우)
   try {
-    const qcode = new URLSearchParams(location.search).get('code');
-    if (qcode && window.FoleyCloud) lsSet(LS_CODE, FoleyCloud.normalizeCode(qcode));
+    const qp = new URLSearchParams(location.search).get('padlet');
+    if (qp && /^https:\/\//i.test(qp)) lsSet(LS_PADLET, qp);
   } catch (e) { /* 무시 */ }
 
-  /* ---------- 선생님께 보내기 ---------- */
-  async function sendProject() {
-    if (!window.FoleyCloud || !FoleyCloud.available) { toast('보내기 설정이 아직 안 되어 있어요'); return; }
-    if (!canRender()) return;
-    if (!navigator.onLine) { toast('인터넷이 연결되어 있지 않아요 📶'); return; }
+  /* ---------- 패들렛에 올리기 ---------- */
+  let lastFile = null;
 
-    const name = studentName() || await askName();
-    let code = classCode();
-    if (code) {
-      try { await FoleyCloud.signInAnon(); if (!(await FoleyCloud.getClass(code))) code = ''; } catch (e) { code = ''; }
-    }
-    if (!code) code = await askCode();
-    if (!code) return;
-
-    // 1단계: 작품 만들기
-    els.sendText.textContent = '🎬 작품을 만드는 중이에요… 영상이 끝날 때까지 기다려요';
-    els.sendProgress.style.width = '0%';
-    els.sendCancel.hidden = false;
-    els.sendDone.hidden = true;
-    els.sendOverlay.hidden = false;
-    const result = await renderProject({
-      onProgress: (p) => { els.sendProgress.style.width = `${p * 50}%`; },
-      cancelButton: els.sendCancel,
-    });
-    if (result.cancelled) { els.sendOverlay.hidden = true; toast('보내기를 그만뒀어요'); return; }
-
-    // 2단계: 올리기
-    els.sendText.textContent = '📤 선생님께 보내는 중이에요…';
-    els.sendCancel.hidden = true;
-    try {
-      await FoleyCloud.uploadWork({
-        code, name,
-        videoBlob: result.blob,
-        thumbBlob: result.thumbBlob,
-        duration: state.duration,
-        onProgress: (p) => { els.sendProgress.style.width = `${50 + p * 50}%`; },
-      });
-      els.sendProgress.style.width = '100%';
-      els.sendText.innerHTML = '<span class="send-result">🎉</span><br>보냈어요!<br><small>선생님 화면에 내 작품이 나타나요</small>';
-    } catch (e) {
-      console.error(e);
-      if (e && e.message === 'NO_CLASS') {
-        lsSet(LS_CODE, '');
-        els.sendText.innerHTML = '<span class="send-result">😢</span><br>교실 코드가 맞지 않아요<br><small>다시 보내기를 눌러 코드를 적어요</small>';
-      } else {
-        els.sendText.innerHTML = '<span class="send-result">😢</span><br>보내지 못했어요<br><small>인터넷을 확인하고 다시 보내기를 눌러요</small>';
-      }
-    }
-    els.sendDone.hidden = false;
-    els.sendDone.onclick = () => { els.sendOverlay.hidden = true; };
+  function safeFileName(name) {
+    return (name || '작품').replace(/[\\/:*?"<>|]+/g, '').trim() || '작품';
   }
 
-  els.btnSend.addEventListener('click', sendProject);
+  function downloadFile(file) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+
+  async function sendToPadlet() {
+    if (!canRender()) return;
+    const name = studentName() || await askName();
+
+    els.sendText.textContent = '🎬 작품을 만드는 중이에요… 영상이 끝날 때까지 기다려요';
+    els.sendProgress.style.width = '0%';
+    els.sendOverlay.hidden = false;
+    const result = await renderProject({
+      onProgress: (p) => { els.sendProgress.style.width = `${p * 100}%`; },
+      cancelButton: els.sendCancel,
+    });
+    els.sendOverlay.hidden = true;
+    if (result.cancelled) { toast('그만뒀어요'); return; }
+
+    const fileName = `폴리아티스트_${safeFileName(name)}.${result.ext}`;
+    lastFile = new File([result.blob], fileName, { type: result.blob.type || 'video/webm' });
+
+    // 공유 시트(패들렛 앱 등)를 쓸 수 있는지
+    let canShare = false;
+    try { canShare = !!(navigator.canShare && navigator.canShare({ files: [lastFile] })); } catch (e) { canShare = false; }
+
+    // 공유 시트가 없으면 파일을 먼저 기기에 저장해 둔다
+    if (!canShare) downloadFile(lastFile);
+
+    const url = padletUrl();
+    els.padletFilename.textContent = safeFileName(name);
+    els.padletShare.hidden = !canShare;
+    els.padletOpen.hidden = !url;
+    if (url) els.padletOpen.href = url;
+    els.padletNolink.hidden = !!url;
+    els.padletModal.hidden = false;
+  }
+
+  els.padletShare.addEventListener('click', async () => {
+    if (!lastFile) return;
+    try {
+      await navigator.share({ files: [lastFile], title: lastFile.name });
+      toast('보냈어요! 🎉');
+    } catch (e) {
+      if (e && e.name !== 'AbortError') { downloadFile(lastFile); toast('공유가 안 돼서 파일로 저장했어요 💾'); }
+    }
+  });
+  els.padletSave.addEventListener('click', () => { if (lastFile) { downloadFile(lastFile); toast('파일을 저장했어요 💾'); } });
+  els.padletClose.addEventListener('click', () => { els.padletModal.hidden = true; });
+  els.btnSend.addEventListener('click', sendToPadlet);
 
   /* ---------- 자동 저장 (IndexedDB) ---------- */
   const DB_NAME = 'foley-artist';
@@ -1335,7 +1328,7 @@
     const tag = (e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
     if (!els.modal.hidden || !els.exportOverlay.hidden || !els.iconModal.hidden || !els.qrModal.hidden
-      || !els.nameModal.hidden || !els.codeModal.hidden || !els.sendOverlay.hidden) return;
+      || !els.nameModal.hidden || !els.padletModal.hidden || !els.sendOverlay.hidden) return;
     if (e.code === 'Space') {
       e.preventDefault();
       if (state.recording) stopRecording();

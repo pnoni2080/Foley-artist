@@ -22,9 +22,9 @@
   <header class="topbar">
     <div class="logo"><span class="logo-emoji">🎬🔊</span> 폴리 아티스트</div>
     <div class="topbar-actions">
-      <button id="student-badge" class="btn btn-ghost student-badge" title="내 이름 바꾸기" hidden>👤 <span id="student-name">이름</span></button>
+      <button id="student-badge" class="btn btn-ghost student-badge" title="내 이름 바꾸기">👤 <span id="student-name">이름</span></button>
       <button id="btn-open-video" class="btn btn-big btn-blue">🎬 영상 가져오기</button>
-      <button id="btn-send" class="btn btn-big btn-green" hidden>📤 선생님께 보내기</button>
+      <button id="btn-send" class="btn btn-big btn-green">📤 패들렛에 올리기</button>
       <button id="btn-export" class="btn btn-big">💾 내 기기에 저장</button>
       <button id="btn-new" class="btn btn-ghost">🧹 새로 시작</button>
       <button id="btn-qr" class="btn btn-ghost" title="접속 QR 보기">📱 QR</button>
@@ -153,8 +153,10 @@
     <div class="modal-box qr-box">
       <p class="modal-text">📱 QR을 찍으면 이 앱이 열려요</p>
       <div id="qr-code" class="qr-code"></div>
-      <label class="qr-url-label" for="qr-url">주소</label>
+      <label class="qr-url-label" for="qr-url">앱 주소</label>
       <input id="qr-url" class="qr-url" type="text" spellcheck="false">
+      <label class="qr-url-label" for="qr-padlet">패들렛 주소 (선택) · 넣으면 학생 화면에 "패들렛 열기" 버튼이 생겨요</label>
+      <input id="qr-padlet" class="qr-url" type="url" placeholder="https://padlet.com/..." spellcheck="false">
       <div class="modal-btns">
         <button id="qr-close" class="btn btn-big btn-blue">닫기</button>
       </div>
@@ -172,15 +174,23 @@
     </div>
   </div>
 
-  <!-- 교실 코드 -->
-  <div class="modal" id="code-modal" hidden>
-    <div class="modal-box">
-      <p class="modal-text">🏫 선생님이 알려 준 교실 코드를 적어요</p>
-      <input id="code-input" class="big-input code-input" type="text" maxlength="6" placeholder="ABCD" autocomplete="off" autocapitalize="characters">
-      <p id="code-error" class="input-error" hidden>그런 교실이 없어요. 다시 확인해요</p>
+  <!-- 패들렛에 올리기 안내 -->
+  <div class="modal" id="padlet-modal" hidden>
+    <div class="modal-box padlet-box">
+      <p class="modal-text">🎉 작품 파일이 준비됐어요!</p>
+      <ol class="steps">
+        <li><b>패들렛</b>을 열어요</li>
+        <li><b>➕</b> 버튼을 누르고 <b>파일 올리기</b>를 골라요</li>
+        <li>방금 만든 <b>폴리아티스트_<span id="padlet-filename">이름</span></b> 파일을 골라요</li>
+      </ol>
+      <div class="padlet-btns">
+        <button id="padlet-share" class="btn btn-big btn-green" hidden>📲 패들렛 앱으로 보내기</button>
+        <a id="padlet-open" class="btn btn-big btn-blue" target="_blank" rel="noopener" hidden>🌐 패들렛 열기</a>
+        <button id="padlet-save" class="btn btn-big">💾 파일 다시 저장</button>
+      </div>
+      <p id="padlet-nolink" class="hint-dark" hidden>선생님이 알려 준 패들렛 주소로 들어가서 올려요</p>
       <div class="modal-btns">
-        <button id="code-ok" class="btn btn-big btn-blue">확인</button>
-        <button id="code-cancel" class="btn btn-big btn-ghost">취소</button>
+        <button id="padlet-close" class="btn btn-ghost">닫기</button>
       </div>
     </div>
   </div>
@@ -188,11 +198,10 @@
   <!-- 보내기 진행 -->
   <div class="modal" id="send-overlay" hidden>
     <div class="modal-box">
-      <p class="modal-text" id="send-text">📤 작품을 만드는 중이에요…</p>
+      <p class="modal-text" id="send-text">🎬 작품을 만드는 중이에요…</p>
       <div class="progress"><div id="send-progress" class="progress-fill"></div></div>
       <div class="modal-btns">
         <button id="send-cancel" class="btn btn-ghost">그만두기</button>
-        <button id="send-done" class="btn btn-big btn-blue" hidden>좋아요!</button>
       </div>
     </div>
   </div>
@@ -201,12 +210,6 @@
   <input type="file" id="file-input" accept="video/*" hidden>
 
   <script src="js/vendor/qrcode.js"></script>
-  <script src="js/vendor/firebase/firebase-app-compat.js"></script>
-  <script src="js/vendor/firebase/firebase-auth-compat.js"></script>
-  <script src="js/vendor/firebase/firebase-firestore-compat.js"></script>
-  <script src="js/vendor/firebase/firebase-storage-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
-  <script src="js/cloud.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
