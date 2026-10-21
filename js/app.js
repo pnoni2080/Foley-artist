@@ -17,7 +17,7 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-9';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.21-10';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -28,6 +28,9 @@
     '🔥', '💥', '⚡', '❄️', '🍳', '🥤', '🍎', '🎉', '⚽', '🏀', '😂', '😱',
     '📞', '⏰', '🔨', '✂️', '📣', '🎃', '👻', '🤖', '🦖', '🐉',
   ];
+  // 녹음 항목마다 다른 색 (12가지 순환)
+  const SOUND_COLORS = ['#FF8A80', '#FFB74D', '#FFF176', '#AED581', '#4DD0E1', '#64B5F6', '#B39DDB', '#F48FB1',
+    '#80CBC4', '#FFAB91', '#C5E1A5', '#90CAF9'];
   const TRACK_COLORS = ['#FFB3AE', '#FFD9A3', '#FFF3A3', '#CFF5B0', '#A9E2FF', '#CFC0FF', '#FFC6DD', '#B3F5E6'];
 
   /* ---------- 화면 요소 ---------- */
@@ -44,7 +47,9 @@
     chkOriginal: $('#chk-original'),
     btnRecord: $('#btn-record'),
     recordStatus: $('#record-status'),
-    recordTarget: $('#record-target'),
+    soundList: $('#sound-list'),
+    soundEmpty: $('#sound-empty'),
+    soundHint: $('#sound-hint'),
     meterFill: $('#meter-fill'),
     btnAddTrack: $('#btn-add-track'),
     btnAddTrack2: $('#btn-add-track-2'),
@@ -102,7 +107,9 @@
     videoUrl: '',
     duration: 0,
     tracks: [],        // { id, name, icon, color, muted }
-    clips: [],         // { id, trackId, start, duration, name, blob, buffer, peaks }
+    clips: [],         // { id, trackId, start, offset, duration, fullDuration, name, color, blob, buffer, peaks }
+    sounds: [],        // 녹음한 소리 목록 { id, name, color, blob, buffer, peaks, duration, recStart }
+    selectedSoundId: null,
     selectedTrackId: null,
     selectedClipId: null,
     pps: 60,           // 1초당 픽셀
@@ -247,6 +254,7 @@
   function play() {
     if (!state.duration) { toast('먼저 영상을 가져와요! 🎬'); return; }
     ensureAudio();
+    stopPreview();
     if (els.video.ended || els.video.currentTime >= state.duration - 0.05) {
       els.video.currentTime = 0;
     }
@@ -513,7 +521,12 @@
   els.btnAddTrack2.addEventListener('click', () => { addTrack(); toast('새 트랙을 만들었어요 ➕'); });
 
   /* ---------- 클립 ---------- */
-  async function addClipFromBlob(blob, trackId, start, name) {
+  /* ---------- 녹음한 소리 목록 ---------- */
+  const soundById = (id) => state.sounds.find((x) => x.id === id);
+  let soundCounter = 0;
+  let previewSrc = null;
+
+  async function addSound(blob, recStart) {
     let buffer;
     try {
       buffer = await blobToBuffer(blob);
@@ -522,24 +535,125 @@
       toast('소리를 읽지 못했어요 😢 다시 녹음해 봐요');
       return null;
     }
+    soundCounter = Math.max(soundCounter, state.sounds.length) + 1;
+    const sound = {
+      id: uid(),
+      name: `녹음 ${soundCounter}`,
+      color: SOUND_COLORS[(soundCounter - 1) % SOUND_COLORS.length],
+      blob, buffer,
+      peaks: computePeaks(buffer),
+      duration: buffer.duration,
+      recStart: Math.max(0, recStart || 0),
+    };
+    state.sounds.push(sound);
+    state.selectedSoundId = sound.id;
+    renderSounds();
+    renderTracks();
+    saveProjectSoon();
+    return sound;
+  }
+
+  function selectSound(id) {
+    state.selectedSoundId = id;
+    if (id) state.selectedClipId = null;
+    renderSounds();
+    renderTracks();
+  }
+  els.soundHint.addEventListener('click', () => { if (state.selectedSoundId) selectSound(null); });
+
+  function stopPreview() {
+    if (previewSrc) { try { previewSrc.stop(); } catch (e) { /* 끝남 */ } previewSrc = null; }
+  }
+  function previewSound(sound) {
+    ensureAudio();
+    stopPreview();
+    if (state.playing) pause();
+    const src = ctx.createBufferSource();
+    src.buffer = sound.buffer;
+    src.connect(master);
+    src.onended = () => { if (previewSrc === src) previewSrc = null; };
+    src.start();
+    previewSrc = src;
+  }
+
+  async function deleteSound(id) {
+    const sound = soundById(id);
+    if (!sound) return;
+    const ok = await ask(`"${sound.name}" 소리를 목록에서 지울까요?\n트랙에 넣어 둔 것은 그대로 남아요`, '지우기', '그대로 두기');
+    if (!ok) return;
+    state.sounds = state.sounds.filter((x) => x.id !== id);
+    if (state.selectedSoundId === id) state.selectedSoundId = null;
+    renderSounds();
+    renderTracks();
+    saveProjectSoon();
+  }
+
+  function renderSounds() {
+    els.soundList.innerHTML = '';
+    els.soundEmpty.hidden = state.sounds.length > 0;
+    const sel = state.selectedSoundId;
+    els.soundHint.textContent = sel ? '👇 넣을 트랙을 눌러요 (취소)' : '소리를 고른 뒤 트랙을 눌러 넣어요';
+    els.soundHint.classList.toggle('active', !!sel);
+    for (const sound of state.sounds) {
+      const item = document.createElement('div');
+      item.className = 'sound-item' + (sound.id === sel ? ' selected' : '');
+      const placed = state.clips.filter((c) => c.soundId === sound.id).length;
+      if (placed) item.classList.add('placed');
+      const sw = document.createElement('div');
+      sw.className = 'sound-swatch';
+      sw.style.background = sound.color;
+      const name = document.createElement('div');
+      name.className = 'sound-name';
+      name.textContent = sound.name;
+      const meta = document.createElement('div');
+      meta.className = 'sound-meta';
+      meta.textContent = `${sound.duration.toFixed(1)}초` + (placed ? ` · 트랙 ${placed}` : '');
+      const play = document.createElement('button');
+      play.className = 'sound-btn';
+      play.textContent = '▶';
+      play.title = '들어 보기';
+      play.addEventListener('click', (e) => { e.stopPropagation(); previewSound(sound); });
+      const del = document.createElement('button');
+      del.className = 'sound-btn';
+      del.textContent = '🗑';
+      del.title = '목록에서 지우기';
+      del.addEventListener('click', (e) => { e.stopPropagation(); deleteSound(sound.id); });
+      item.append(sw, name, meta, play, del);
+      item.addEventListener('click', () => selectSound(sound.id));
+      els.soundList.appendChild(item);
+    }
+  }
+
+  /* ---------- 고른 소리를 트랙에 넣기 ---------- */
+  function placeSound(trackId) {
+    const sound = soundById(state.selectedSoundId);
+    const track = trackById(trackId);
+    if (!sound || !track) return false;
     const clip = {
       id: uid(),
       trackId,
-      start: Math.max(0, start),
+      soundId: sound.id,
+      start: sound.recStart,
       offset: 0,
-      duration: buffer.duration,
-      fullDuration: buffer.duration,
-      name,
-      blob,
-      buffer,
-      peaks: computePeaks(buffer),
+      duration: sound.duration,
+      fullDuration: sound.duration,
+      name: sound.name,
+      color: sound.color,
+      blob: sound.blob,
+      buffer: sound.buffer,
+      peaks: sound.peaks,
     };
     state.clips.push(clip);
+    state.selectedSoundId = null;
     state.selectedClipId = clip.id;
+    state.selectedTrackId = trackId;
     if (state.playing) scheduleClips();
+    renderSounds();
     renderTracks();
     saveProjectSoon();
-    return clip;
+    seek(clip.start);
+    toast(`"${track.name}" 트랙에 넣었어요 🎵`);
+    return true;
   }
 
   async function deleteSelectedClip() {
@@ -735,7 +849,7 @@
 
     for (const track of state.tracks) {
       const row = document.createElement('div');
-      row.className = 'row track-row';
+      row.className = 'row track-row' + (state.selectedSoundId ? ' can-drop' : '');
       row.dataset.trackId = track.id;
 
       // 머리 부분
@@ -761,7 +875,6 @@
       nameInput.addEventListener('change', () => {
         track.name = nameInput.value.trim() || track.name;
         nameInput.value = track.name;
-        updateRecordTarget();
         saveProjectSoon();
       });
       nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') nameInput.blur(); });
@@ -782,7 +895,7 @@
       btns.append(muteBtn);
 
       head.append(iconBtn, nameInput, btns);
-      head.addEventListener('click', () => selectTrack(track.id));
+      head.addEventListener('click', () => { if (state.selectedSoundId) placeSound(track.id); else selectTrack(track.id); });
 
       // 레인
       const lane = document.createElement('div');
@@ -791,6 +904,7 @@
       lane.style.opacity = track.muted ? '0.45' : '1';
       lane.addEventListener('click', (e) => {
         if (e.target !== lane) return;
+        if (state.selectedSoundId) { placeSound(track.id); return; }
         state.selectedTrackId = track.id;
         state.selectedClipId = null;
         seek((e.clientX - lane.getBoundingClientRect().left) / state.pps);
@@ -810,13 +924,7 @@
 
     els.btnDelClip.disabled = !state.selectedClipId;
     els.btnDelTrack.disabled = !selectedTrack();
-    updateRecordTarget();
     renderRuler();
-  }
-
-  function updateRecordTarget() {
-    const t = selectedTrack();
-    els.recordTarget.textContent = t ? `${t.icon} ${t.name}` : '트랙을 골라요';
   }
 
   function makeClipEl(clip, track) {
@@ -825,7 +933,7 @@
     el.dataset.clipId = clip.id;
     el.style.left = `${clip.start * state.pps}px`;
     el.style.width = `${Math.max(8, clip.duration * state.pps)}px`;
-    el.style.background = track.color;
+    el.style.background = clip.color || track.color;
     const canvas = document.createElement('canvas');
     const label = document.createElement('span');
     label.className = 'clip-label';
@@ -979,12 +1087,10 @@
   let micStream = null;
   let recChunks = [];
   let recStartTime = 0;
-  let recTrackId = null;
   let armed = false;      // 카운트다운 중
   let cancelArm = false;
   let analyser = null;
   let meterRaf = 0;
-  let recCounter = 0;
 
   function setRecordUI(mode) {
     els.btnRecord.classList.toggle('armed', mode === 'armed');
@@ -1029,9 +1135,6 @@
     ensureAudio();
     if (state.playing) pause();
 
-    let track = selectedTrack();
-    if (!track) track = addTrack();
-    recTrackId = track.id;
 
     // 마이크 켜기
     try {
@@ -1112,12 +1215,9 @@
     const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
     recChunks = [];
     if (blob.size < 100) { toast('녹음된 소리가 없어요 😢'); return; }
-    const track = trackById(recTrackId) || addTrack();
-    recCounter += 1;
-    const name = `녹음 ${state.clips.length + 1}`;
-    const clip = await addClipFromBlob(blob, track.id, recStartTime, name);
-    if (clip) {
-      toast('녹음 완료! ▶ 눌러서 들어 봐요 🎉');
+    const sound = await addSound(blob, recStartTime);
+    if (sound) {
+      toast('녹음 완료! 목록에서 고른 뒤 트랙을 눌러 넣어요 🎵', 3000);
       seek(recStartTime);
     }
   }
@@ -1351,9 +1451,12 @@
         videoName: state.videoName,
         originalOn: els.chkOriginal.checked,
         tracks: state.tracks.map((t) => ({ ...t })),
+        sounds: state.sounds.map((x) => ({
+          id: x.id, name: x.name, color: x.color, blob: x.blob, duration: x.duration, recStart: x.recStart,
+        })),
         clips: state.clips.map((c) => ({
-          id: c.id, trackId: c.trackId, start: c.start, offset: c.offset || 0, duration: c.duration,
-          fullDuration: c.fullDuration || c.duration, name: c.name, blob: c.blob,
+          id: c.id, trackId: c.trackId, soundId: c.soundId || null, start: c.start, offset: c.offset || 0,
+          duration: c.duration, fullDuration: c.fullDuration || c.duration, name: c.name, color: c.color || null, blob: c.blob,
         })),
       });
     } catch (e) {
@@ -1377,6 +1480,13 @@
     if (data.videoBlob) {
       try { await loadVideo(data.videoBlob, data.videoName, { keepTracks: true, silent: true }); } catch (e) { /* 안내됨 */ }
     }
+    for (const x of data.sounds || []) {
+      try {
+        const buffer = await blobToBuffer(x.blob);
+        state.sounds.push({ ...x, buffer, peaks: computePeaks(buffer), duration: buffer.duration });
+      } catch (e) { console.warn('소리 목록 복원 실패', e); }
+    }
+    soundCounter = state.sounds.length;
     for (const c of data.clips || []) {
       try {
         const buffer = await blobToBuffer(c.blob);
@@ -1386,6 +1496,7 @@
         state.clips.push({ ...c, offset, duration, fullDuration, buffer, peaks: computePeaks(buffer) });
       } catch (e) { console.warn('소리 복원 실패', e); }
     }
+    renderSounds();
     renderTimeline();
     toast('지난번 작품을 다시 불러왔어요 📂');
     return true;
@@ -1402,8 +1513,11 @@
     els.video.load();
     Object.assign(state, {
       videoBlob: null, videoName: '', videoUrl: '', duration: 0,
-      tracks: [], clips: [], selectedTrackId: null, selectedClipId: null, thumbs: [], pps: 60,
+      tracks: [], clips: [], sounds: [], selectedTrackId: null, selectedClipId: null, selectedSoundId: null, thumbs: [], pps: 60,
     });
+    soundCounter = 0;
+    stopPreview();
+    renderSounds();
     trackGains.clear();
     els.videoEmpty.hidden = false;
     fitVideoFrame();
@@ -1470,6 +1584,7 @@
   /* ---------- 시작 ---------- */
   const verEl = document.getElementById('app-version');
   if (verEl) verEl.textContent = APP_VERSION;
+  renderSounds();
   renderTimeline();
   restoreProject();
 })();

@@ -63,7 +63,6 @@
 
     <aside class="record-panel">
       <h2>🎤 소리 녹음하기</h2>
-      <p class="record-target">녹음할 트랙: <span id="record-target">트랙을 골라요</span></p>
 
       <button id="btn-record" class="record-btn" title="녹음" aria-label="녹음">
         <svg class="mic-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4z"/><path d="M19 11a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 0 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/></svg>
@@ -76,11 +75,13 @@
         <div id="meter-fill" class="meter-fill"></div>
       </div>
 
-      <div class="tips">
-        <div class="tip">1️⃣ 영상을 가져와요</div>
-        <div class="tip">2️⃣ 🎤 버튼을 누르고 영상을 보며 소리를 내요</div>
-        <div class="tip">3️⃣ 멈춤 버튼을 누르면 녹음 끝!</div>
-        <div class="tip">4️⃣ ▶ 재생해서 들어 봐요</div>
+      <div class="sound-list-wrap">
+        <div class="sound-list-head">
+          <span>🎵 녹음한 소리</span>
+          <span id="sound-hint" class="sound-hint">소리를 고른 뒤 트랙을 눌러 넣어요</span>
+        </div>
+        <div id="sound-list" class="sound-list"></div>
+        <p id="sound-empty" class="sound-empty">녹음하면 여기에 소리가 쌓여요</p>
       </div>
     </aside>
   </main>

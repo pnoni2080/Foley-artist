@@ -210,8 +210,27 @@ input { font: inherit; }
   transition: width 0.06s linear;
 }
 
-.tips { width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
-.tip { background: #f4f7fb; border-radius: 12px; padding: 8px 12px; font-size: 15px; }
+.sound-list-wrap { width: 100%; display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; }
+.sound-list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-weight: 900; font-size: 16px; }
+.sound-hint { font-size: 12px; font-weight: 500; color: var(--muted); }
+.sound-hint.active { color: var(--blue-dark); font-weight: 700; cursor: pointer; }
+.sound-list { display: flex; flex-direction: column; gap: 6px; overflow: auto; min-height: 0; }
+.sound-empty { margin: 4px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
+.sound-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 12px;
+  border: 3px solid transparent; background: #f4f7fb;
+  cursor: pointer; flex: 0 0 auto;
+}
+.sound-item:active { transform: scale(0.98); }
+.sound-item.selected { border-color: var(--blue); background: #e6f0ff; }
+.sound-item.placed { opacity: 0.9; }
+.sound-swatch { width: 26px; height: 26px; border-radius: 8px; flex: 0 0 auto; border: 2px solid rgba(0,0,0,0.12); }
+.sound-name { flex: 1; min-width: 0; font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sound-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.sound-btn { border: none; background: #fff; width: 34px; height: 34px; border-radius: 10px; font-size: 15px; padding: 0; flex: 0 0 auto; box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
+.track-row.can-drop .lane { background-color: #e6f0ff; }
+.track-row.can-drop .track-head { background: #e6f0ff; }
 
 /* ---------- 타임라인 ---------- */
 .timeline-area {
@@ -397,7 +416,6 @@ input { font: inherit; }
   .record-btn svg { width: 44px; height: 44px; }
   .record-label { font-size: 16px; }
   .record-status { min-height: 0; font-size: 14px; }
-  .tips { display: none; }
   .timeline-toolbar { padding: 6px 16px; }
   .track-row { height: 64px; }
   .video-row { height: 52px; }
@@ -410,7 +428,7 @@ input { font: inherit; }
   .workspace { grid-template-columns: 1fr; grid-template-rows: auto auto; overflow: auto; }
   .video-stage { height: 52vh; height: 52dvh; flex: 0 0 auto; }
   .record-panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-  .tips { display: none; }
+  .sound-list-wrap { flex: 1 1 200px; }
   .record-btn { width: 104px; height: 104px; }
   .record-btn svg { width: 48px; height: 48px; }
   .logo { font-size: 20px; }
