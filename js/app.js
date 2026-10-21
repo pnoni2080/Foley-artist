@@ -17,7 +17,7 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-10';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.21-11';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -186,6 +186,54 @@
       try { s.stop(); } catch (e) { /* 이미 끝남 */ }
     }
     activeSources = [];
+    stopExportMix();
+  }
+
+  /* ---------- 내보내기용 믹스: 모든 트랙 소리를 미리 하나로 합쳐 둔다 ----------
+     실시간으로 클립을 하나씩 예약하는 대신, 합쳐진 버퍼 하나를 재생해서
+     기기 성능이나 브라우저 차이와 상관없이 모든 트랙이 같은 타이밍으로 들어가게 함 */
+  let exportMix = null; // { buffer, src }
+
+  async function renderMixBuffer() {
+    ensureAudio();
+    const sr = ctx.sampleRate;
+    let end = state.duration;
+    for (const c of state.clips) end = Math.max(end, c.start + c.duration);
+    const len = Math.ceil((end + 0.5) * sr);
+    const OfflineAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const off = new OfflineAC(1, len, sr);
+    let any = false;
+    for (const c of state.clips) {
+      if (!c.buffer) continue;
+      const track = trackById(c.trackId);
+      if (!track || track.muted) continue;
+      const src = off.createBufferSource();
+      src.buffer = c.buffer;
+      src.connect(off.destination);
+      src.start(Math.max(0, c.start), c.offset || 0, c.duration);
+      any = true;
+    }
+    if (!any) return null;
+    return await off.startRendering();
+  }
+
+  function startExportMix() {
+    stopExportMix();
+    if (!exportMix || !exportMix.buffer || !ctx) return;
+    const src = ctx.createBufferSource();
+    src.buffer = exportMix.buffer;
+    src.connect(master);
+    const t = els.video.currentTime || 0;
+    if (t >= exportMix.buffer.duration) return;
+    src.start(ctx.currentTime + 0.03, t);
+    exportMix.src = src;
+  }
+
+  function stopExportMix() {
+    if (exportMix && exportMix.src) {
+      try { exportMix.src.stop(); } catch (e) { /* 이미 끝남 */ }
+      exportMix.src = null;
+    }
   }
 
   async function blobToBuffer(blob) {
@@ -290,7 +338,8 @@
 
   els.video.addEventListener('playing', () => {
     state.playing = true;
-    scheduleClips();
+    if (state.exporting && exportMix) startExportMix();
+    else scheduleClips();
     updatePlayBtn();
   });
   els.video.addEventListener('pause', () => {
@@ -307,7 +356,10 @@
   els.video.addEventListener('waiting', stopClips);
   els.video.addEventListener('seeking', () => { if (state.playing) stopClips(); });
   els.video.addEventListener('seeked', () => {
-    if (state.playing && !els.video.paused) scheduleClips();
+    if (state.playing && !els.video.paused) {
+      if (state.exporting && exportMix) startExportMix();
+      else scheduleClips();
+    }
   });
 
   els.btnPlay.addEventListener('click', () => (state.playing ? pause() : play()));
@@ -1244,6 +1296,15 @@
       setTimeout(r, 1500);
     });
 
+    // 모든 트랙의 소리를 하나로 합치기
+    exportMix = { buffer: null, src: null };
+    try {
+      exportMix.buffer = await renderMixBuffer();
+    } catch (e) {
+      console.warn('믹스 만들기 실패, 실시간 재생으로 대신함', e);
+      exportMix = null;
+    }
+
     const vw = els.video.videoWidth || 640;
     const vh = els.video.videoHeight || 360;
     const scale = Math.min(1, 1280 / vw);
@@ -1298,6 +1359,8 @@
     try { rec.stop(); } catch (e) { /* 이미 멈춤 */ }
     await stopped;
     try { master.disconnect(dest); } catch (e) { /* 무시 */ }
+    stopExportMix();
+    exportMix = null;
     state.exporting = false;
 
     const blob = new Blob(chunks, { type: rec.mimeType || 'video/webm' });
