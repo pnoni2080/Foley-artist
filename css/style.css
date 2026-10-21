@@ -212,10 +212,7 @@ input { font: inherit; }
 
 .sound-list-wrap { width: 100%; display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; }
 .sound-list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-weight: 900; font-size: 16px; }
-.sound-hint { font-size: 12px; font-weight: 500; color: var(--muted); }
-.sound-hint.active { color: var(--blue-dark); font-weight: 700; cursor: pointer; }
 .sound-list { display: flex; flex-direction: column; gap: 6px; overflow: auto; min-height: 0; }
-.sound-empty { margin: 4px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
 .sound-item {
   display: flex; align-items: center; gap: 8px;
   padding: 6px 8px; border-radius: 12px;

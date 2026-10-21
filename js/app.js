@@ -17,7 +17,7 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-11';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.21-12';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -48,8 +48,6 @@
     btnRecord: $('#btn-record'),
     recordStatus: $('#record-status'),
     soundList: $('#sound-list'),
-    soundEmpty: $('#sound-empty'),
-    soundHint: $('#sound-hint'),
     meterFill: $('#meter-fill'),
     btnAddTrack: $('#btn-add-track'),
     btnAddTrack2: $('#btn-add-track-2'),
@@ -598,7 +596,7 @@
       recStart: Math.max(0, recStart || 0),
     };
     state.sounds.push(sound);
-    state.selectedSoundId = sound.id;
+    state.selectedSoundId = null;
     renderSounds();
     renderTracks();
     saveProjectSoon();
@@ -606,12 +604,15 @@
   }
 
   function selectSound(id) {
-    state.selectedSoundId = id;
-    if (id) state.selectedClipId = null;
+    const next = state.selectedSoundId === id ? null : id;
+    state.selectedSoundId = next;
+    if (next) {
+      state.selectedClipId = null;
+      toast('넣을 트랙을 눌러요 👇');
+    }
     renderSounds();
     renderTracks();
   }
-  els.soundHint.addEventListener('click', () => { if (state.selectedSoundId) selectSound(null); });
 
   function stopPreview() {
     if (previewSrc) { try { previewSrc.stop(); } catch (e) { /* 끝남 */ } previewSrc = null; }
@@ -642,10 +643,7 @@
 
   function renderSounds() {
     els.soundList.innerHTML = '';
-    els.soundEmpty.hidden = state.sounds.length > 0;
     const sel = state.selectedSoundId;
-    els.soundHint.textContent = sel ? '👇 넣을 트랙을 눌러요 (취소)' : '소리를 고른 뒤 트랙을 눌러 넣어요';
-    els.soundHint.classList.toggle('active', !!sel);
     for (const sound of state.sounds) {
       const item = document.createElement('div');
       item.className = 'sound-item' + (sound.id === sel ? ' selected' : '');
@@ -1137,6 +1135,7 @@
   /* ---------- 녹음 ---------- */
   let mediaRecorder = null;
   let micStream = null;
+  let meterStream = null;
   let recChunks = [];
   let recStartTime = 0;
   let armed = false;      // 카운트다운 중
@@ -1198,10 +1197,20 @@
       toast('마이크를 쓸 수 있게 허락해 주세요 🎤');
       return;
     }
-    const micSrc = ctx.createMediaStreamSource(micStream);
-    analyser = ctx.createAnalyser();
-    analyser.fftSize = 512;
-    micSrc.connect(analyser);
+    // 소리 크기 막대: 녹음에 쓰는 스트림과 별도의 복제 트랙으로 분석
+    // (일부 안드로이드 브라우저는 녹음이 시작되면 같은 트랙의 분석이 멈춤)
+    try {
+      meterStream = new MediaStream(micStream.getAudioTracks().map((t) => t.clone()));
+      const micSrc = ctx.createMediaStreamSource(meterStream);
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = 0.6;
+      const silent = ctx.createGain();
+      silent.gain.value = 0;
+      micSrc.connect(analyser);
+      analyser.connect(silent);
+      silent.connect(ctx.destination); // 출력에 닿아야 분석이 계속 돌아감(소리는 0)
+    } catch (e) { console.warn('소리 크기 막대 준비 실패', e); }
     startMeter();
 
     // 카운트다운
@@ -1258,7 +1267,9 @@
   function releaseMic() {
     stopMeter();
     if (micStream) micStream.getTracks().forEach((t) => t.stop());
+    if (meterStream) meterStream.getTracks().forEach((t) => t.stop());
     micStream = null;
+    meterStream = null;
     analyser = null;
   }
 
@@ -1269,7 +1280,7 @@
     if (blob.size < 100) { toast('녹음된 소리가 없어요 😢'); return; }
     const sound = await addSound(blob, recStartTime);
     if (sound) {
-      toast('녹음 완료! 목록에서 고른 뒤 트랙을 눌러 넣어요 🎵', 3000);
+      toast('녹음 완료! 목록의 소리를 누른 뒤 트랙을 눌러 넣어요 🎵', 3000);
       seek(recStartTime);
     }
   }
