@@ -19,6 +19,14 @@
 
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
+  // 그림 고르기 창에 나오는 전체 목록
+  const ICON_CHOICES = [
+    '🎤', '🥁', '🎸', '🎹', '🎺', '🔔', '🎵', '👏', '👣', '🏃', '🚪', '🔑',
+    '🐶', '🐱', '🐦', '🐸', '🐴', '🦁', '🐮', '🐷', '🐔', '🐝', '🦆', '🐘',
+    '🚗', '🚂', '✈️', '🚁', '🚲', '🚀', '⛵', '🚨', '🌧️', '⛈️', '💨', '🌊',
+    '🔥', '💥', '⚡', '❄️', '🍳', '🥤', '🍎', '🎉', '⚽', '🏀', '😂', '😱',
+    '📞', '⏰', '🔨', '✂️', '📣', '🎃', '👻', '🤖', '🦖', '🐉',
+  ];
   const TRACK_COLORS = ['#FFB3AE', '#FFD9A3', '#FFF3A3', '#CFF5B0', '#A9E2FF', '#CFC0FF', '#FFC6DD', '#B3F5E6'];
 
   /* ---------- 화면 요소 ---------- */
@@ -39,6 +47,15 @@
     btnAddTrack: $('#btn-add-track'),
     btnAddTrack2: $('#btn-add-track-2'),
     btnDelClip: $('#btn-del-clip'),
+    btnDelTrack: $('#btn-del-track'),
+    btnQr: $('#btn-qr'),
+    iconModal: $('#icon-modal'),
+    iconGrid: $('#icon-grid'),
+    iconCancel: $('#icon-cancel'),
+    qrModal: $('#qr-modal'),
+    qrCode: $('#qr-code'),
+    qrUrl: $('#qr-url'),
+    qrClose: $('#qr-close'),
     btnZoomIn: $('#btn-zoom-in'),
     btnZoomOut: $('#btn-zoom-out'),
     tlScroll: $('#timeline-scroll'),
@@ -210,9 +227,23 @@
       els.video.currentTime = 0;
     }
     els.video.play().catch((e) => console.warn(e));
+    keepAwake();
   }
 
   function pause() { els.video.pause(); }
+
+  /* ---------- 화면 안 꺼지게 (태블릿) ---------- */
+  let wakeLock = null;
+  async function keepAwake() {
+    try {
+      if (!('wakeLock' in navigator) || wakeLock) return;
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) { /* 지원 안 하거나 거부됨 */ }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && (state.playing || state.recording)) keepAwake();
+  });
 
   function seek(t) {
     if (!state.duration) return;
@@ -483,6 +514,48 @@
   }
 
   els.btnDelClip.addEventListener('click', deleteSelectedClip);
+  els.btnDelTrack.addEventListener('click', () => { if (state.selectedTrackId) deleteTrack(state.selectedTrackId); });
+
+  /* ---------- 트랙 그림 고르기 ---------- */
+  function openIconPicker(track) {
+    els.iconGrid.innerHTML = '';
+    for (const icon of ICON_CHOICES) {
+      const b = document.createElement('button');
+      b.className = 'icon-choice' + (icon === track.icon ? ' current' : '');
+      b.textContent = icon;
+      b.addEventListener('click', () => {
+        track.icon = icon;
+        els.iconModal.hidden = true;
+        renderTracks();
+        saveProjectSoon();
+      });
+      els.iconGrid.appendChild(b);
+    }
+    els.iconModal.hidden = false;
+  }
+  els.iconCancel.addEventListener('click', () => { els.iconModal.hidden = true; });
+
+  /* ---------- 접속 QR ---------- */
+  function renderQr() {
+    const url = els.qrUrl.value.trim();
+    els.qrCode.innerHTML = '';
+    if (!url || typeof qrcode !== 'function') return;
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(url);
+      qr.make();
+      els.qrCode.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+    } catch (e) {
+      els.qrCode.textContent = '주소가 너무 길어요';
+    }
+  }
+  els.btnQr.addEventListener('click', () => {
+    if (!els.qrUrl.value) els.qrUrl.value = location.href.split('#')[0];
+    renderQr();
+    els.qrModal.hidden = false;
+  });
+  els.qrUrl.addEventListener('input', renderQr);
+  els.qrClose.addEventListener('click', () => { els.qrModal.hidden = true; });
 
   /* ---------- 타임라인 그리기 ---------- */
   function contentSeconds() {
@@ -578,10 +651,8 @@
       iconBtn.title = '그림 바꾸기';
       iconBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const i = TRACK_ICONS.indexOf(track.icon);
-        track.icon = TRACK_ICONS[(i + 1) % TRACK_ICONS.length];
-        renderTracks();
-        saveProjectSoon();
+        state.selectedTrackId = track.id;
+        openIconPicker(track);
       });
 
       const nameInput = document.createElement('input');
@@ -610,12 +681,7 @@
         renderTracks();
         saveProjectSoon();
       });
-      const delBtn = document.createElement('button');
-      delBtn.className = 'mini-btn';
-      delBtn.textContent = '🗑';
-      delBtn.title = '트랙 지우기';
-      delBtn.addEventListener('click', (e) => { e.stopPropagation(); deleteTrack(track.id); });
-      btns.append(muteBtn, delBtn);
+      btns.append(muteBtn);
 
       head.append(iconBtn, nameInput, btns);
       head.addEventListener('click', () => selectTrack(track.id));
@@ -625,7 +691,7 @@
       lane.className = 'lane track-lane';
       lane.style.width = `${w}px`;
       lane.style.opacity = track.muted ? '0.45' : '1';
-      lane.addEventListener('pointerdown', (e) => {
+      lane.addEventListener('click', (e) => {
         if (e.target !== lane) return;
         state.selectedTrackId = track.id;
         state.selectedClipId = null;
@@ -645,6 +711,7 @@
     els.tracks.querySelectorAll('.clip').forEach((el) => drawWave(el, clipById(el.dataset.clipId)));
 
     els.btnDelClip.disabled = !state.selectedClipId;
+    els.btnDelTrack.disabled = !selectedTrack();
     updateRecordTarget();
     renderRuler();
   }
@@ -737,7 +804,7 @@
 
   // 눈금자 / 영상 레인 클릭 → 이동
   for (const lane of [els.ruler, els.videoLane]) {
-    lane.addEventListener('pointerdown', (e) => {
+    lane.addEventListener('click', (e) => {
       seek((e.clientX - lane.getBoundingClientRect().left) / state.pps);
     });
   }
@@ -856,6 +923,7 @@
 
     state.recording = true;
     setRecordUI('recording');
+    keepAwake();
     mediaRecorder.start(250);
     els.video.play().catch((e) => console.warn(e));
   }
@@ -1098,7 +1166,7 @@
   document.addEventListener('keydown', (e) => {
     const tag = (e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
-    if (!els.modal.hidden || !els.exportOverlay.hidden) return;
+    if (!els.modal.hidden || !els.exportOverlay.hidden || !els.iconModal.hidden || !els.qrModal.hidden) return;
     if (e.code === 'Space') {
       e.preventDefault();
       if (state.recording) stopRecording();
@@ -1118,6 +1186,32 @@
   document.addEventListener('pointerdown', () => { if (ctx) ensureAudio(); }, { capture: true });
 
   window.addEventListener('resize', () => renderTimeline());
+
+  /* ---------- 태블릿: 뒤로 가기·새로고침으로 작업이 날아가지 않게 ---------- */
+  function armBackTrap() {
+    try { history.pushState({ foley: true }, '', location.href); } catch (e) { /* 무시 */ }
+  }
+  armBackTrap();
+  armBackTrap();
+  window.addEventListener('popstate', () => {
+    armBackTrap();
+    if (!els.modal.hidden || !els.iconModal.hidden || !els.qrModal.hidden) {
+      els.modal.hidden = true; els.iconModal.hidden = true; els.qrModal.hidden = true;
+      return;
+    }
+    toast('뒤로 가기 대신 화면의 버튼을 써요 😊 작업은 자동으로 저장돼요');
+  });
+  window.addEventListener('beforeunload', (e) => {
+    if (state.duration || state.clips.length) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+  // 길게 눌렀을 때 브라우저 메뉴가 뜨지 않게
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('input')) return;
+    e.preventDefault();
+  });
 
   /* ---------- 시작 ---------- */
   renderTimeline();

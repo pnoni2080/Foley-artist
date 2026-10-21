@@ -1,0 +1,17 @@
+{
+  "name": "폴리 아티스트",
+  "short_name": "폴리아티스트",
+  "description": "영상을 보며 소리를 녹음해서 입히는 초등학생용 폴리아티스트 활동 앱",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#f4f7fb",
+  "theme_color": "#3b82f6",
+  "lang": "ko",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
