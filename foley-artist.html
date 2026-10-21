@@ -1,0 +1,4216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <!-- 이 파일은 scripts/build-standalone.py 로 만들어진 단독 실행용입니다. 수정은 index.html / css / js 에서 하세요. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="폴리 아티스트">
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMCIgZmlsbD0iIzNiODJmNiIvPgogIDxyZWN0IHg9Ijg2IiB5PSIxMzAiIHdpZHRoPSIzNDAiIGhlaWdodD0iMjMwIiByeD0iMjgiIGZpbGw9IiMxZTNhOGEiLz4KICA8cmVjdCB4PSI4NiIgeT0iMTMwIiB3aWR0aD0iMzQwIiBoZWlnaHQ9IjUyIiByeD0iMjgiIGZpbGw9IiNmYmJmMjQiLz4KICA8cmVjdCB4PSI4NiIgeT0iMTU4IiB3aWR0aD0iMzQwIiBoZWlnaHQ9IjI0IiBmaWxsPSIjZmJiZjI0Ii8+CiAgPGcgZmlsbD0iIzFlM2E4YSI+CiAgICA8cmVjdCB4PSIxMjAiIHk9IjEzNCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjQ0IiB0cmFuc2Zvcm09InNrZXdYKC0yMCkiLz4KICAgIDxyZWN0IHg9IjIwMCIgeT0iMTM0IiB3aWR0aD0iMzAiIGhlaWdodD0iNDQiIHRyYW5zZm9ybT0ic2tld1goLTIwKSIvPgogICAgPHJlY3QgeD0iMjgwIiB5PSIxMzQiIHdpZHRoPSIzMCIgaGVpZ2h0PSI0NCIgdHJhbnNmb3JtPSJza2V3WCgtMjApIi8+CiAgICA8cmVjdCB4PSIzNjAiIHk9IjEzNCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjQ0IiB0cmFuc2Zvcm09InNrZXdYKC0yMCkiLz4KICA8L2c+CiAgPGcgZmlsbD0iI2ZmZiI+CiAgICA8cmVjdCB4PSIxMzAiIHk9IjI0MCIgd2lkdGg9IjIyIiBoZWlnaHQ9IjYwIiByeD0iMTEiLz4KICAgIDxyZWN0IHg9IjE3MCIgeT0iMjE1IiB3aWR0aD0iMjIiIGhlaWdodD0iMTEwIiByeD0iMTEiLz4KICAgIDxyZWN0IHg9IjIxMCIgeT0iMjU1IiB3aWR0aD0iMjIiIGhlaWdodD0iMzAiIHJ4PSIxMSIvPgogICAgPHJlY3QgeD0iMjUwIiB5PSIyMDAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIxNDAiIHJ4PSIxMSIvPgogICAgPHJlY3QgeD0iMjkwIiB5PSIyMzUiIHdpZHRoPSIyMiIgaGVpZ2h0PSI3MCIgcng9IjExIi8+CiAgICA8cmVjdCB4PSIzMzAiIHk9IjIyNSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjkwIiByeD0iMTEiLz4KICAgIDxyZWN0IHg9IjM3MCIgeT0iMjUwIiB3aWR0aD0iMjIiIGhlaWdodD0iNDAiIHJ4PSIxMSIvPgogIDwvZz4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSI0MjAiIHI9IjQ2IiBmaWxsPSIjZWY0NDQ0Ii8+CiAgPHJlY3QgeD0iMjM2IiB5PSIzOTIiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0NCIgcng9IjIwIiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeD0iMjUyIiB5PSI0MzYiIHdpZHRoPSI4IiBoZWlnaHQ9IjE0IiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo=">
+  <title>폴리 아티스트 - 영상에 소리 입히기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+/* ===== 폴리 아티스트 스타일 ===== */
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --line: #dfe6ef;
+  --text: #22304a;
+  --muted: #7a889c;
+  --blue: #3b82f6;
+  --blue-dark: #2563eb;
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --red: #ef4444;
+  --red-dark: #dc2626;
+  --yellow: #fbbf24;
+  --head-w: 190px;
+  --radius: 16px;
+  --shadow: 0 4px 14px rgba(30, 50, 90, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%; margin: 0;
+  overscroll-behavior: none;          /* 당겨서 새로고침 막기 */
+  touch-action: manipulation;         /* 두 번 탭 확대 막기 */
+  -webkit-touch-callout: none;        /* 길게 눌러도 메뉴 안 뜨게 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button { font: inherit; cursor: pointer; }
+input { font: inherit; }
+[hidden] { display: none !important; }
+
+/* ---------- 버튼 ---------- */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: #e8eef7;
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+  transition: transform 0.08s ease, filter 0.1s ease;
+  white-space: nowrap;
+}
+.btn:hover { filter: brightness(1.05); }
+.btn:active { transform: translateY(2px) scale(0.98); box-shadow: none; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-big { font-size: 20px; padding: 14px 26px; }
+.btn-small { font-size: 16px; padding: 10px 16px; min-height: 44px; }
+.btn-blue { background: var(--blue); color: #fff; box-shadow: 0 3px 0 var(--blue-dark); }
+.btn-green { background: var(--green); color: #fff; box-shadow: 0 3px 0 var(--green-dark); }
+.btn-red { background: #fee2e2; color: var(--red-dark); }
+.btn-ghost { background: transparent; box-shadow: none; color: var(--muted); }
+.btn-ghost:hover { background: #e8eef7; }
+.btn-round {
+  width: 60px; height: 60px; border-radius: 50%;
+  font-size: 26px; padding: 0; display: grid; place-items: center;
+}
+.btn-play { width: 76px; height: 76px; font-size: 34px; background: var(--blue); color: #fff; box-shadow: 0 4px 0 var(--blue-dark); }
+
+/* ---------- 상단 바 ---------- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 20px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--line);
+}
+.logo { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+.logo-emoji { margin-right: 6px; }
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+/* ---------- 작업 공간 ---------- */
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+  padding: 16px 20px;
+  min-height: 0;
+  min-width: 0;
+}
+
+.video-area { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+
+.video-frame {
+  position: relative;
+  flex: 1; min-height: 0;
+  background: #14161c;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: grid; place-items: center;
+}
+.video-frame.dragover { outline: 5px dashed var(--yellow); outline-offset: -5px; }
+#video { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.video-empty {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  color: #fff; text-align: center;
+  background: linear-gradient(160deg, #2b3a67, #1b2440);
+}
+.big-emoji { font-size: 72px; line-height: 1; }
+.empty-title { font-size: 24px; font-weight: 700; margin: 0; }
+.hint { color: #aab5d4; font-size: 15px; margin: 0; }
+
+.countdown {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-size: 160px; font-weight: 900; color: #fff;
+  text-shadow: 0 6px 30px rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.35);
+  animation: pop 1s ease-in-out infinite;
+}
+@keyframes pop { 0% { transform: scale(0.7); opacity: 0.4; } 30% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+.rec-badge {
+  position: absolute; top: 14px; left: 14px;
+  background: var(--red); color: #fff;
+  padding: 6px 14px; border-radius: 999px; font-weight: 900;
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+
+.transport {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.time { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; min-width: 120px; }
+.toggle { margin-left: auto; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; }
+.toggle input { width: 22px; height: 22px; accent-color: var(--blue); }
+
+/* ---------- 녹음 패널 ---------- */
+.record-panel {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  overflow: auto;
+}
+.record-panel h2 { margin: 0; font-size: 22px; flex: 0 0 auto; }
+.record-panel > p { flex: 0 0 auto; }
+.record-target { margin: 0; color: var(--muted); font-size: 16px; text-align: center; }
+.record-target span { color: var(--text); font-weight: 700; }
+
+.record-btn {
+  width: 140px; height: 140px; border-radius: 50%;
+  border: 6px solid #fff;
+  background: var(--red);
+  box-shadow: 0 0 0 4px #fecaca, 0 8px 22px rgba(239, 68, 68, 0.35);
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;                      /* 패널이 낮아도 찌그러지지 않게 */
+  padding: 0; position: relative;
+  transition: transform 0.12s ease, background 0.2s ease;
+}
+.record-btn:hover { background: #f05252; }
+.record-btn:active { transform: scale(0.94); }
+.record-btn svg { width: 64px; height: 64px; fill: #fff; display: block; }
+.record-btn .stop-icon { display: none; }
+.record-btn.armed { animation: pulse 1s ease-in-out infinite; }
+.record-btn.recording {
+  background: #1f2937;
+  animation: ring 1.2s ease-out infinite;
+}
+.record-btn.recording .mic-icon { display: none; }
+.record-btn.recording .stop-icon { display: block; fill: var(--red); }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 4px #fecaca, 0 0 0 8px rgba(239, 68, 68, 0.45); }
+  100% { box-shadow: 0 0 0 4px #fecaca, 0 0 0 26px rgba(239, 68, 68, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .record-btn.armed, .record-btn.recording, .rec-badge, .countdown { animation: none; }
+}
+.record-label { margin: 2px 0 0; font-size: 20px; font-weight: 900; }
+
+.record-status { margin: 0; text-align: center; font-size: 16px; color: var(--muted); min-height: 44px; }
+
+.meter { width: 100%; height: 18px; background: #e8eef7; border-radius: 999px; overflow: hidden; }
+.meter-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--green), var(--yellow) 70%, var(--red));
+  transition: width 0.06s linear;
+}
+
+.tips { width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+.tip { background: #f4f7fb; border-radius: 12px; padding: 8px 12px; font-size: 15px; }
+
+/* ---------- 타임라인 ---------- */
+.timeline-area {
+  display: flex; flex-direction: column;
+  min-width: 0; overflow: hidden;
+  background: var(--panel);
+  border-top: 2px solid var(--line);
+  min-height: 0;
+}
+.timeline-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.tl-title { font-weight: 900; font-size: 20px; margin-right: 6px; }
+.spacer { flex: 1; }
+
+.timeline-scroll { flex: 1; min-height: 0; overflow: auto; position: relative; background: #f9fbfe; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; }
+.timeline-inner { position: relative; min-width: 100%; }
+
+.row { display: flex; position: relative; }
+.track-head {
+  position: sticky; left: 0; z-index: 6;
+  width: var(--head-w); flex: 0 0 var(--head-w);
+  background: #fff;
+  border-right: 2px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px;
+  font-weight: 700;
+}
+.lane {
+  position: relative; flex: 0 0 auto;
+  border-bottom: 1px solid var(--line);
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+}
+
+.ruler-row { height: 30px; }
+.ruler-head { font-size: 14px; color: var(--muted); justify-content: center; }
+.ruler { background: #eef2f8; cursor: pointer; }
+.tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid #b7c2d3; font-size: 12px; color: var(--muted); padding-left: 4px; line-height: 30px; }
+
+.video-row { height: 64px; }
+.video-lane { background: #1f2430; cursor: pointer; overflow: hidden; }
+.thumb { position: absolute; top: 0; height: 100%; object-fit: cover; opacity: 0.9; border-right: 1px solid rgba(255,255,255,0.15); }
+.video-label { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: #fff; font-size: 14px; pointer-events: none; text-shadow: 0 1px 3px #000; }
+
+.track-row { height: 76px; }
+.track-row.drop-target .lane { background-color: #fff7cc; }
+.track-head.selected { background: #e6f0ff; box-shadow: inset 4px 0 0 var(--blue); }
+.icon-btn { border: none; background: #f1f5fb; width: 44px; height: 44px; border-radius: 12px; font-size: 24px; padding: 0; flex: 0 0 auto; }
+.icon-btn:active { transform: scale(0.95); }
+.track-name {
+  flex: 1; min-width: 0; border: none; background: transparent;
+  font-weight: 700; font-size: 15px; padding: 2px 4px; border-radius: 6px;
+  color: var(--text);
+}
+.track-name:focus { outline: 2px solid var(--blue); background: #fff; }
+.track-btns { display: flex; flex-direction: row; gap: 4px; }
+.mini-btn { border: none; background: #f1f5fb; font-size: 20px; width: 40px; height: 40px; padding: 0; border-radius: 10px; line-height: 1; flex: 0 0 auto; }
+.mini-btn:hover { background: #e8eef7; }
+.track-lane { cursor: pointer; }
+
+.clip {
+  position: absolute; top: 6px; bottom: 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid rgba(0,0,0,0.12);
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.clip.selected { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.35); }
+.clip.dragging { cursor: grabbing; opacity: 0.85; z-index: 3; }
+.clip canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.clip-label {
+  position: absolute; left: 8px; top: 4px;
+  font-size: 13px; font-weight: 700; color: rgba(0,0,0,0.7);
+  pointer-events: none; white-space: nowrap;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.add-row { height: 56px; }
+.add-head { justify-content: center; border-bottom: none; }
+.add-lane { border-bottom: none; background: transparent; }
+
+.playhead {
+  position: absolute; top: 0; bottom: 0;
+  width: 3px; margin-left: -1px;
+  background: var(--red);
+  z-index: 5; pointer-events: none;
+}
+.playhead-knob {
+  position: absolute; top: 0; left: -8px;
+  border-left: 9px solid transparent; border-right: 9px solid transparent;
+  border-top: 14px solid var(--red);
+}
+
+/* ---------- 모달 / 토스트 ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(20, 30, 50, 0.45);
+  display: grid; place-items: center;
+}
+.modal-box {
+  background: #fff; border-radius: 24px; padding: 28px 32px;
+  min-width: 340px; max-width: 90vw;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  display: flex; flex-direction: column; gap: 20px; align-items: center;
+}
+.modal-text { margin: 0; font-size: 22px; font-weight: 700; text-align: center; line-height: 1.5; }
+.modal-text small { font-size: 16px; color: var(--muted); font-weight: 500; }
+.modal-btns { display: flex; gap: 12px; }
+.icon-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;
+  max-width: 440px; max-height: 50vh; overflow: auto; padding: 4px;
+}
+.icon-choice {
+  border: 3px solid transparent; background: #f1f5fb; border-radius: 14px;
+  font-size: 34px; width: 60px; height: 60px; padding: 0; display: grid; place-items: center;
+}
+.icon-choice:active { transform: scale(0.92); }
+.icon-choice.current { border-color: var(--blue); background: #e6f0ff; }
+.qr-box { max-width: 420px; }
+.qr-code { display: grid; place-items: center; background: #fff; padding: 8px; border-radius: 12px; }
+.qr-code svg { width: min(60vw, 320px); height: auto; }
+.qr-url-label { font-size: 14px; color: var(--muted); align-self: flex-start; }
+.qr-url { width: 100%; font-size: 15px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; -webkit-user-select: text; user-select: text; }
+.padlet-box { max-width: 480px; }
+.steps { margin: 0; padding-left: 26px; font-size: 18px; line-height: 1.8; align-self: stretch; }
+.padlet-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.padlet-btns .btn { text-align: center; text-decoration: none; display: block; }
+.hint-dark { margin: 0; color: var(--muted); font-size: 15px; text-align: center; }
+.progress { width: 100%; height: 20px; background: #e8eef7; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: var(--green); transition: width 0.2s linear; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 340px; transform: translateX(-50%);
+  background: #1f2937; color: #fff;
+  padding: 14px 24px; border-radius: 999px;
+  font-size: 20px; font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 60;
+  animation: toast-in 0.25s ease;
+}
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ---------- 작은 화면 ---------- */
+@media (max-width: 900px) {
+  body { grid-template-rows: auto 1fr 300px; }
+  .topbar { flex-wrap: wrap; }
+  .topbar-actions { flex-wrap: wrap; }
+  .workspace { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .record-panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .tips { display: none; }
+  .record-btn { width: 104px; height: 104px; }
+  .record-btn svg { width: 48px; height: 48px; }
+  .logo { font-size: 20px; }
+  .btn-big { font-size: 16px; padding: 10px 16px; }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- 상단 바 -->
+  <header class="topbar">
+    <div class="logo"><span class="logo-emoji">🎬🔊</span> 폴리 아티스트</div>
+    <div class="topbar-actions">
+      <button id="btn-open-video" class="btn btn-big btn-blue">🎬 영상 가져오기</button>
+      <button id="btn-send" class="btn btn-big btn-green">📤 패들렛에 올리기</button>
+      <button id="btn-export" class="btn btn-big">💾 내 기기에 저장</button>
+      <button id="btn-new" class="btn btn-ghost">🧹 새로 시작</button>
+      <button id="btn-qr" class="btn btn-ghost" title="접속 QR 보기">📱 QR</button>
+    </div>
+  </header>
+
+  <!-- 작업 공간: 좌측 영상, 우측 녹음 패널 -->
+  <main class="workspace">
+    <section class="video-area">
+      <div class="video-frame" id="video-frame">
+        <video id="video" playsinline preload="auto"></video>
+
+        <div class="video-empty" id="video-empty">
+          <div class="big-emoji">🎬</div>
+          <p class="empty-title">영상을 가져와서 시작해요!</p>
+          <button class="btn btn-big btn-blue" id="btn-open-video-2">🎬 영상 가져오기</button>
+          <p class="hint">영상 파일을 여기로 끌어다 놓아도 돼요</p>
+        </div>
+
+        <div class="countdown" id="countdown" hidden>3</div>
+        <div class="rec-badge" id="rec-badge" hidden>● 녹음 중</div>
+      </div>
+
+      <div class="transport">
+        <button id="btn-start" class="btn btn-round" title="처음으로">⏮</button>
+        <button id="btn-play" class="btn btn-round btn-play" title="재생">▶</button>
+        <div class="time" id="time-display">0:00 / 0:00</div>
+        <label class="toggle">
+          <input type="checkbox" id="chk-original" checked>
+          <span>🔊 영상 원래 소리</span>
+        </label>
+      </div>
+    </section>
+
+    <aside class="record-panel">
+      <h2>🎤 소리 녹음하기</h2>
+      <p class="record-target">녹음할 트랙: <span id="record-target">트랙을 골라요</span></p>
+
+      <button id="btn-record" class="record-btn" title="녹음" aria-label="녹음">
+        <svg class="mic-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4z"/><path d="M19 11a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 0 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/></svg>
+        <svg class="stop-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg>
+      </button>
+      <p id="record-label" class="record-label">녹음</p>
+      <p id="record-status" class="record-status">버튼을 누르면 3초 뒤에 녹음이 시작돼요</p>
+
+      <div class="meter" title="마이크 소리 크기">
+        <div id="meter-fill" class="meter-fill"></div>
+      </div>
+
+      <div class="tips">
+        <div class="tip">1️⃣ 영상을 가져와요</div>
+        <div class="tip">2️⃣ 🎤 버튼을 누르고 영상을 보며 소리를 내요</div>
+        <div class="tip">3️⃣ 멈춤 버튼을 누르면 녹음 끝!</div>
+        <div class="tip">4️⃣ ▶ 재생해서 들어 봐요</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 하단 타임라인 -->
+  <section class="timeline-area">
+    <div class="timeline-toolbar">
+      <span class="tl-title">🎞 트랙</span>
+      <button id="btn-add-track" class="btn btn-small">➕ 트랙 추가</button>
+      <button id="btn-del-clip" class="btn btn-small btn-red" disabled>🗑 고른 소리 지우기</button>
+      <button id="btn-del-track" class="btn btn-small btn-red" disabled>🗑 고른 트랙 지우기</button>
+      <span class="spacer"></span>
+      <button id="btn-zoom-out" class="btn btn-small" title="작게 보기">🔍➖</button>
+      <button id="btn-zoom-in" class="btn btn-small" title="크게 보기">🔍➕</button>
+    </div>
+
+    <div class="timeline-scroll" id="timeline-scroll">
+      <div class="timeline-inner" id="timeline-inner">
+        <div class="row ruler-row">
+          <div class="track-head ruler-head">시간</div>
+          <div class="lane ruler" id="ruler"></div>
+        </div>
+        <div class="row video-row">
+          <div class="track-head video-head">🎬 영상</div>
+          <div class="lane video-lane" id="video-lane"></div>
+        </div>
+        <div id="tracks"></div>
+        <div class="row add-row">
+          <div class="track-head add-head">
+            <button id="btn-add-track-2" class="btn btn-small">➕ 트랙 추가</button>
+          </div>
+          <div class="lane add-lane"></div>
+        </div>
+        <div class="playhead" id="playhead"><div class="playhead-knob"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 물어보기 창 -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box">
+      <p id="modal-text" class="modal-text"></p>
+      <div class="modal-btns">
+        <button id="modal-ok" class="btn btn-big btn-blue">네</button>
+        <button id="modal-cancel" class="btn btn-big btn-ghost">아니요</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 내보내기 진행 창 -->
+  <div class="modal" id="export-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-text">⏳ 작품을 만드는 중이에요…<br><small>영상이 끝날 때까지 잠깐 기다려요</small></p>
+      <div class="progress"><div id="export-progress" class="progress-fill"></div></div>
+      <div class="modal-btns">
+        <button id="export-cancel" class="btn btn-ghost">그만두기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트랙 그림 고르기 -->
+  <div class="modal" id="icon-modal" hidden>
+    <div class="modal-box">
+      <p class="modal-text">트랙 그림을 골라요</p>
+      <div class="icon-grid" id="icon-grid"></div>
+      <div class="modal-btns">
+        <button id="icon-cancel" class="btn btn-big btn-ghost">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 접속 QR -->
+  <div class="modal" id="qr-modal" hidden>
+    <div class="modal-box qr-box">
+      <p class="modal-text">📱 QR을 찍으면 이 앱이 열려요</p>
+      <div id="qr-code" class="qr-code"></div>
+      <label class="qr-url-label" for="qr-url">앱 주소</label>
+      <input id="qr-url" class="qr-url" type="text" spellcheck="false">
+      <label class="qr-url-label" for="qr-padlet">패들렛 주소 (선택) · 넣으면 학생 화면에 "패들렛 열기" 버튼이 생겨요</label>
+      <input id="qr-padlet" class="qr-url" type="url" placeholder="https://padlet.com/..." spellcheck="false">
+      <div class="modal-btns">
+        <button id="qr-close" class="btn btn-big btn-blue">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패들렛에 올리기 안내 -->
+  <div class="modal" id="padlet-modal" hidden>
+    <div class="modal-box padlet-box">
+      <p class="modal-text">🎉 작품 파일이 준비됐어요!</p>
+      <ol class="steps">
+        <li><b>패들렛</b>을 열어요</li>
+        <li><b>➕</b> 버튼을 누르고 <b>파일 올리기</b>를 골라요</li>
+        <li>방금 만든 <b>폴리아티스트_작품</b> 파일을 골라요</li>
+      </ol>
+      <div class="padlet-btns">
+        <button id="padlet-share" class="btn btn-big btn-green" hidden>📲 패들렛 앱으로 보내기</button>
+        <a id="padlet-open" class="btn btn-big btn-blue" target="_blank" rel="noopener" hidden>🌐 패들렛 열기</a>
+        <button id="padlet-save" class="btn btn-big">💾 파일 다시 저장</button>
+      </div>
+      <p id="padlet-nolink" class="hint-dark" hidden>선생님이 알려 준 패들렛 주소로 들어가서 올려요</p>
+      <div class="modal-btns">
+        <button id="padlet-close" class="btn btn-ghost">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 보내기 진행 -->
+  <div class="modal" id="send-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-text" id="send-text">🎬 작품을 만드는 중이에요…</p>
+      <div class="progress"><div id="send-progress" class="progress-fill"></div></div>
+      <div class="modal-btns">
+        <button id="send-cancel" class="btn btn-ghost">그만두기</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <input type="file" id="file-input" accept="video/*" hidden>
+
+  <script>
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+  <script>
+/* ============================================================
+   폴리 아티스트 — 초등학생용 "영상에 소리 입히기" 웹앱
+   (빌드 없이 동작하는 순수 JavaScript)
+   ============================================================ */
+(() => {
+  'use strict';
+
+  /* ---------- 유틸 ---------- */
+  const $ = (sel) => document.querySelector(sel);
+  const uid = () => Math.random().toString(36).slice(2, 10);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const fmt = (s) => {
+    s = Math.max(0, Number.isFinite(s) ? s : 0);
+    const m = Math.floor(s / 60);
+    const r = Math.floor(s % 60);
+    return `${m}:${String(r).padStart(2, '0')}`;
+  };
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  const HEAD_W = 190;
+  const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
+  // 그림 고르기 창에 나오는 전체 목록
+  const ICON_CHOICES = [
+    '🎤', '🥁', '🎸', '🎹', '🎺', '🔔', '🎵', '👏', '👣', '🏃', '🚪', '🔑',
+    '🐶', '🐱', '🐦', '🐸', '🐴', '🦁', '🐮', '🐷', '🐔', '🐝', '🦆', '🐘',
+    '🚗', '🚂', '✈️', '🚁', '🚲', '🚀', '⛵', '🚨', '🌧️', '⛈️', '💨', '🌊',
+    '🔥', '💥', '⚡', '❄️', '🍳', '🥤', '🍎', '🎉', '⚽', '🏀', '😂', '😱',
+    '📞', '⏰', '🔨', '✂️', '📣', '🎃', '👻', '🤖', '🦖', '🐉',
+  ];
+  const TRACK_COLORS = ['#FFB3AE', '#FFD9A3', '#FFF3A3', '#CFF5B0', '#A9E2FF', '#CFC0FF', '#FFC6DD', '#B3F5E6'];
+
+  /* ---------- 화면 요소 ---------- */
+  const els = {
+    video: $('#video'),
+    videoFrame: $('#video-frame'),
+    videoEmpty: $('#video-empty'),
+    countdown: $('#countdown'),
+    recBadge: $('#rec-badge'),
+    btnPlay: $('#btn-play'),
+    btnStart: $('#btn-start'),
+    timeDisplay: $('#time-display'),
+    chkOriginal: $('#chk-original'),
+    btnRecord: $('#btn-record'),
+    recordStatus: $('#record-status'),
+    recordTarget: $('#record-target'),
+    meterFill: $('#meter-fill'),
+    btnAddTrack: $('#btn-add-track'),
+    btnAddTrack2: $('#btn-add-track-2'),
+    btnDelClip: $('#btn-del-clip'),
+    btnDelTrack: $('#btn-del-track'),
+    btnQr: $('#btn-qr'),
+    iconModal: $('#icon-modal'),
+    iconGrid: $('#icon-grid'),
+    iconCancel: $('#icon-cancel'),
+    qrModal: $('#qr-modal'),
+    qrCode: $('#qr-code'),
+    qrUrl: $('#qr-url'),
+    qrClose: $('#qr-close'),
+    btnSend: $('#btn-send'),
+    recordLabel: $('#record-label'),
+    padletModal: $('#padlet-modal'),
+    padletShare: $('#padlet-share'),
+    padletOpen: $('#padlet-open'),
+    padletSave: $('#padlet-save'),
+    padletNolink: $('#padlet-nolink'),
+    padletClose: $('#padlet-close'),
+    sendOverlay: $('#send-overlay'),
+    sendText: $('#send-text'),
+    sendProgress: $('#send-progress'),
+    sendCancel: $('#send-cancel'),
+    qrPadlet: $('#qr-padlet'),
+    btnZoomIn: $('#btn-zoom-in'),
+    btnZoomOut: $('#btn-zoom-out'),
+    tlScroll: $('#timeline-scroll'),
+    tlInner: $('#timeline-inner'),
+    ruler: $('#ruler'),
+    videoLane: $('#video-lane'),
+    tracks: $('#tracks'),
+    playhead: $('#playhead'),
+    fileInput: $('#file-input'),
+    btnOpenVideo: $('#btn-open-video'),
+    btnOpenVideo2: $('#btn-open-video-2'),
+    btnExport: $('#btn-export'),
+    btnNew: $('#btn-new'),
+    modal: $('#modal'),
+    modalText: $('#modal-text'),
+    modalOk: $('#modal-ok'),
+    modalCancel: $('#modal-cancel'),
+    exportOverlay: $('#export-overlay'),
+    exportProgress: $('#export-progress'),
+    exportCancel: $('#export-cancel'),
+    toast: $('#toast'),
+  };
+
+  /* ---------- 상태 ---------- */
+  const state = {
+    videoBlob: null,
+    videoName: '',
+    videoUrl: '',
+    duration: 0,
+    tracks: [],        // { id, name, icon, color, muted }
+    clips: [],         // { id, trackId, start, duration, name, blob, buffer, peaks }
+    selectedTrackId: null,
+    selectedClipId: null,
+    pps: 60,           // 1초당 픽셀
+    playing: false,
+    recording: false,
+    exporting: false,
+    thumbs: [],        // { t, url }
+    thumbInterval: 1,
+  };
+
+  /* ---------- 오디오 엔진 ---------- */
+  let ctx = null;
+  let master = null;
+  let mediaSrc = null;
+  const trackGains = new Map();
+  let activeSources = [];
+
+  function ensureAudio() {
+    if (ctx) {
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.connect(ctx.destination);
+    try {
+      mediaSrc = ctx.createMediaElementSource(els.video);
+      mediaSrc.connect(master);
+    } catch (e) {
+      console.warn('영상 소리를 오디오 엔진에 연결하지 못했어요', e);
+    }
+    for (const t of state.tracks) trackGain(t);
+    return ctx;
+  }
+
+  function trackGain(track) {
+    if (!ctx) return null;
+    let g = trackGains.get(track.id);
+    if (!g) {
+      g = ctx.createGain();
+      g.connect(master);
+      trackGains.set(track.id, g);
+    }
+    g.gain.value = track.muted ? 0 : 1;
+    return g;
+  }
+
+  function scheduleClips() {
+    stopClips();
+    if (!ctx) return;
+    const t0 = els.video.currentTime;
+    const base = ctx.currentTime + 0.03;
+    for (const c of state.clips) {
+      if (!c.buffer) continue;
+      if (c.start + c.duration <= t0) continue;
+      const track = trackById(c.trackId);
+      if (!track) continue;
+      const src = ctx.createBufferSource();
+      src.buffer = c.buffer;
+      src.connect(trackGain(track));
+      const when = base + Math.max(0, c.start - t0);
+      const offset = Math.max(0, t0 - c.start);
+      src.start(when, offset);
+      activeSources.push(src);
+    }
+  }
+
+  function stopClips() {
+    for (const s of activeSources) {
+      try { s.stop(); } catch (e) { /* 이미 끝남 */ }
+    }
+    activeSources = [];
+  }
+
+  async function blobToBuffer(blob) {
+    ensureAudio();
+    const arr = await blob.arrayBuffer();
+    return await ctx.decodeAudioData(arr);
+  }
+
+  function computePeaks(buffer, count = 400) {
+    const len = buffer.length;
+    const step = Math.max(1, Math.floor(len / count));
+    const peaks = new Float32Array(count);
+    const channels = [];
+    for (let ch = 0; ch < buffer.numberOfChannels; ch++) channels.push(buffer.getChannelData(ch));
+    for (let i = 0; i < count; i++) {
+      const s0 = i * step;
+      const s1 = Math.min(len, s0 + step);
+      let max = 0;
+      for (const data of channels) {
+        for (let j = s0; j < s1; j += 4) {
+          const v = Math.abs(data[j]);
+          if (v > max) max = v;
+        }
+      }
+      peaks[i] = max;
+    }
+    return peaks;
+  }
+
+  /* ---------- 공용 UI ---------- */
+  let toastTimer = null;
+  function toast(msg, ms = 2200) {
+    els.toast.textContent = msg;
+    els.toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { els.toast.hidden = true; }, ms);
+  }
+
+  function ask(message, okLabel = '네', cancelLabel = '아니요') {
+    return new Promise((resolve) => {
+      els.modalText.textContent = message;
+      els.modalOk.textContent = okLabel;
+      els.modalCancel.textContent = cancelLabel;
+      els.modal.hidden = false;
+      const done = (v) => {
+        els.modal.hidden = true;
+        els.modalOk.onclick = null;
+        els.modalCancel.onclick = null;
+        resolve(v);
+      };
+      els.modalOk.onclick = () => done(true);
+      els.modalCancel.onclick = () => done(false);
+    });
+  }
+
+  const trackById = (id) => state.tracks.find((t) => t.id === id);
+  const clipById = (id) => state.clips.find((c) => c.id === id);
+  const selectedTrack = () => trackById(state.selectedTrackId);
+
+  /* ---------- 재생 ---------- */
+  function play() {
+    if (!state.duration) { toast('먼저 영상을 가져와요! 🎬'); return; }
+    ensureAudio();
+    if (els.video.ended || els.video.currentTime >= state.duration - 0.05) {
+      els.video.currentTime = 0;
+    }
+    els.video.play().catch((e) => console.warn(e));
+    keepAwake();
+  }
+
+  function pause() { els.video.pause(); }
+
+  /* ---------- 화면 안 꺼지게 (태블릿) ---------- */
+  let wakeLock = null;
+  async function keepAwake() {
+    try {
+      if (!('wakeLock' in navigator) || wakeLock) return;
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) { /* 지원 안 하거나 거부됨 */ }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && (state.playing || state.recording)) keepAwake();
+  });
+
+  function seek(t) {
+    if (!state.duration) return;
+    els.video.currentTime = clamp(t, 0, state.duration);
+    updatePlayhead();
+  }
+
+  function updatePlayBtn() {
+    els.btnPlay.textContent = state.playing ? '⏸' : '▶';
+    els.btnPlay.title = state.playing ? '멈춤' : '재생';
+  }
+
+  els.video.addEventListener('playing', () => {
+    state.playing = true;
+    scheduleClips();
+    updatePlayBtn();
+  });
+  els.video.addEventListener('pause', () => {
+    state.playing = false;
+    stopClips();
+    updatePlayBtn();
+  });
+  els.video.addEventListener('ended', () => {
+    state.playing = false;
+    stopClips();
+    updatePlayBtn();
+    if (state.recording) stopRecording();
+  });
+  els.video.addEventListener('waiting', stopClips);
+  els.video.addEventListener('seeking', () => { if (state.playing) stopClips(); });
+  els.video.addEventListener('seeked', () => {
+    if (state.playing && !els.video.paused) scheduleClips();
+  });
+
+  els.btnPlay.addEventListener('click', () => (state.playing ? pause() : play()));
+  els.btnStart.addEventListener('click', () => seek(0));
+  els.chkOriginal.addEventListener('change', applyOriginal);
+
+  function applyOriginal() {
+    els.video.muted = !els.chkOriginal.checked;
+    saveProjectSoon();
+  }
+
+  /* ---------- 매 프레임 화면 갱신 ---------- */
+  function tick() {
+    const t = els.video.currentTime || 0;
+    els.timeDisplay.textContent = `${fmt(t)} / ${fmt(state.duration)}`;
+    updatePlayhead();
+    if (state.playing || state.recording) {
+      const x = HEAD_W + t * state.pps;
+      const visL = els.tlScroll.scrollLeft + HEAD_W;
+      const visR = els.tlScroll.scrollLeft + els.tlScroll.clientWidth;
+      if (x > visR - 30 || x < visL) {
+        els.tlScroll.scrollLeft = Math.max(0, x - HEAD_W - 80);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  function updatePlayhead() {
+    const t = els.video.currentTime || 0;
+    els.playhead.style.left = `${HEAD_W + t * state.pps}px`;
+  }
+
+  /* ---------- 영상 불러오기 ---------- */
+  function loadVideo(blob, name, opts = {}) {
+    return new Promise((resolve, reject) => {
+      if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
+      state.videoBlob = blob;
+      state.videoName = name || '영상';
+      state.videoUrl = URL.createObjectURL(blob);
+      state.thumbs = [];
+      els.video.src = state.videoUrl;
+
+      const onMeta = () => {
+        els.video.removeEventListener('loadedmetadata', onMeta);
+        els.video.removeEventListener('error', onErr);
+        let d = els.video.duration;
+        if (!Number.isFinite(d) || d <= 0) {
+          toast('이 영상은 길이를 알 수 없어요 😢 다른 영상을 가져와요');
+          d = 0;
+        }
+        state.duration = d;
+        els.videoEmpty.hidden = true;
+        if (!opts.keepTracks && state.tracks.length === 0) addTrack();
+        fitZoom();
+        renderTimeline();
+        makeThumbnails();
+        if (!opts.silent) toast(`"${state.videoName}" 영상을 가져왔어요! 🎬`);
+        saveProjectSoon();
+        resolve();
+      };
+      const onErr = () => {
+        els.video.removeEventListener('loadedmetadata', onMeta);
+        els.video.removeEventListener('error', onErr);
+        toast('이 영상은 열 수 없어요 😢 다른 영상을 가져와요');
+        reject(new Error('video load error'));
+      };
+      els.video.addEventListener('loadedmetadata', onMeta);
+      els.video.addEventListener('error', onErr);
+    });
+  }
+
+  async function makeThumbnails() {
+    if (!state.duration) return;
+    const myUrl = state.videoUrl;
+    const count = 14;
+    const interval = Math.max(0.5, state.duration / count);
+    state.thumbInterval = interval;
+    const v = document.createElement('video');
+    v.muted = true;
+    v.preload = 'auto';
+    v.src = myUrl;
+    await new Promise((r) => { v.onloadeddata = r; v.onerror = r; });
+    const w = 120;
+    const h = Math.max(1, Math.round(w * (v.videoHeight || 9) / (v.videoWidth || 16)));
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const c2d = canvas.getContext('2d');
+    const thumbs = [];
+    for (let t = 0; t < state.duration; t += interval) {
+      if (state.videoUrl !== myUrl) return; // 다른 영상으로 바뀜
+      await new Promise((r) => {
+        v.onseeked = r;
+        v.onerror = r;
+        v.currentTime = Math.min(t + 0.05, state.duration);
+      });
+      try {
+        c2d.drawImage(v, 0, 0, w, h);
+        thumbs.push({ t, url: canvas.toDataURL('image/jpeg', 0.6) });
+      } catch (e) { break; }
+    }
+    if (state.videoUrl !== myUrl) return;
+    state.thumbs = thumbs;
+    renderVideoLane();
+  }
+
+  function openVideoPicker() { els.fileInput.click(); }
+  els.btnOpenVideo.addEventListener('click', openVideoPicker);
+  els.btnOpenVideo2.addEventListener('click', openVideoPicker);
+  els.fileInput.addEventListener('change', async () => {
+    const file = els.fileInput.files[0];
+    els.fileInput.value = '';
+    if (!file) return;
+    await handleNewVideoFile(file);
+  });
+
+  async function handleNewVideoFile(file) {
+    if (!file.type.startsWith('video/') && !/\.(mp4|webm|mov|m4v|ogv)$/i.test(file.name)) {
+      toast('영상 파일만 가져올 수 있어요 🎬');
+      return;
+    }
+    if (state.duration && state.clips.length) {
+      const ok = await ask('영상을 바꾸면 녹음한 소리는 그대로 남아요.\n영상을 바꿀까요?', '바꾸기', '그대로 두기');
+      if (!ok) return;
+    }
+    ensureAudio();
+    if (state.playing) pause();
+    try { await loadVideo(file, file.name); } catch (e) { /* 토스트로 안내함 */ }
+  }
+
+  // 끌어다 놓기
+  ['dragenter', 'dragover'].forEach((ev) => els.videoFrame.addEventListener(ev, (e) => {
+    e.preventDefault();
+    els.videoFrame.classList.add('dragover');
+  }));
+  ['dragleave', 'drop'].forEach((ev) => els.videoFrame.addEventListener(ev, (e) => {
+    e.preventDefault();
+    els.videoFrame.classList.remove('dragover');
+  }));
+  els.videoFrame.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) handleNewVideoFile(file);
+  });
+
+  /* ---------- 트랙 ---------- */
+  function addTrack(data) {
+    const n = state.tracks.length;
+    const track = data || {
+      id: uid(),
+      name: `소리 ${n + 1}`,
+      icon: TRACK_ICONS[n % TRACK_ICONS.length],
+      color: TRACK_COLORS[n % TRACK_COLORS.length],
+      muted: false,
+    };
+    state.tracks.push(track);
+    state.selectedTrackId = track.id;
+    if (ctx) trackGain(track);
+    renderTracks();
+    saveProjectSoon();
+    return track;
+  }
+
+  async function deleteTrack(id) {
+    const track = trackById(id);
+    if (!track) return;
+    const clipCount = state.clips.filter((c) => c.trackId === id).length;
+    const msg = clipCount
+      ? `"${track.name}" 트랙과 그 안의 소리 ${clipCount}개를 지울까요?`
+      : `"${track.name}" 트랙을 지울까요?`;
+    const ok = await ask(msg, '지우기', '그대로 두기');
+    if (!ok) return;
+    state.clips = state.clips.filter((c) => c.trackId !== id);
+    state.tracks = state.tracks.filter((t) => t.id !== id);
+    trackGains.delete(id);
+    if (state.selectedTrackId === id) state.selectedTrackId = state.tracks[0] ? state.tracks[0].id : null;
+    if (state.selectedClipId && !clipById(state.selectedClipId)) state.selectedClipId = null;
+    if (state.playing) scheduleClips();
+    renderTracks();
+    saveProjectSoon();
+  }
+
+  function selectTrack(id) {
+    state.selectedTrackId = id;
+    renderTracks();
+  }
+
+  els.btnAddTrack.addEventListener('click', () => { addTrack(); toast('새 트랙을 만들었어요 ➕'); });
+  els.btnAddTrack2.addEventListener('click', () => { addTrack(); toast('새 트랙을 만들었어요 ➕'); });
+
+  /* ---------- 클립 ---------- */
+  async function addClipFromBlob(blob, trackId, start, name) {
+    let buffer;
+    try {
+      buffer = await blobToBuffer(blob);
+    } catch (e) {
+      console.error(e);
+      toast('소리를 읽지 못했어요 😢 다시 녹음해 봐요');
+      return null;
+    }
+    const clip = {
+      id: uid(),
+      trackId,
+      start: Math.max(0, start),
+      duration: buffer.duration,
+      name,
+      blob,
+      buffer,
+      peaks: computePeaks(buffer),
+    };
+    state.clips.push(clip);
+    state.selectedClipId = clip.id;
+    if (state.playing) scheduleClips();
+    renderTracks();
+    saveProjectSoon();
+    return clip;
+  }
+
+  async function deleteSelectedClip() {
+    const clip = clipById(state.selectedClipId);
+    if (!clip) return;
+    const ok = await ask(`"${clip.name}" 소리를 지울까요?`, '지우기', '그대로 두기');
+    if (!ok) return;
+    state.clips = state.clips.filter((c) => c.id !== clip.id);
+    state.selectedClipId = null;
+    if (state.playing) scheduleClips();
+    renderTracks();
+    saveProjectSoon();
+    toast('소리를 지웠어요 🗑');
+  }
+
+  function selectClip(id) {
+    state.selectedClipId = id;
+    const clip = clipById(id);
+    if (clip) state.selectedTrackId = clip.trackId;
+    renderTracks();
+  }
+
+  els.btnDelClip.addEventListener('click', deleteSelectedClip);
+  els.btnDelTrack.addEventListener('click', () => { if (state.selectedTrackId) deleteTrack(state.selectedTrackId); });
+
+  /* ---------- 트랙 그림 고르기 ---------- */
+  function openIconPicker(track) {
+    els.iconGrid.innerHTML = '';
+    for (const icon of ICON_CHOICES) {
+      const b = document.createElement('button');
+      b.className = 'icon-choice' + (icon === track.icon ? ' current' : '');
+      b.textContent = icon;
+      b.addEventListener('click', () => {
+        track.icon = icon;
+        els.iconModal.hidden = true;
+        renderTracks();
+        saveProjectSoon();
+      });
+      els.iconGrid.appendChild(b);
+    }
+    els.iconModal.hidden = false;
+  }
+  els.iconCancel.addEventListener('click', () => { els.iconModal.hidden = true; });
+
+  /* ---------- 접속 QR ---------- */
+  function qrTargetUrl() {
+    const base = els.qrUrl.value.trim();
+    const padlet = els.qrPadlet.value.trim();
+    if (!base) return '';
+    if (!padlet) return base;
+    const sep = base.includes('?') ? '&' : '?';
+    return `${base}${sep}padlet=${encodeURIComponent(padlet)}`;
+  }
+  function renderQr() {
+    const url = qrTargetUrl();
+    els.qrCode.innerHTML = '';
+    if (!url || typeof qrcode !== 'function') return;
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(url);
+      qr.make();
+      els.qrCode.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+    } catch (e) {
+      els.qrCode.textContent = '주소가 너무 길어요';
+    }
+  }
+  els.btnQr.addEventListener('click', () => {
+    if (!els.qrUrl.value) els.qrUrl.value = location.href.split('#')[0].split('?')[0];
+    if (!els.qrPadlet.value) els.qrPadlet.value = padletUrl();
+    renderQr();
+    els.qrModal.hidden = false;
+  });
+  els.qrUrl.addEventListener('input', renderQr);
+  els.qrPadlet.addEventListener('input', () => { lsSet(LS_PADLET, els.qrPadlet.value.trim()); renderQr(); });
+  els.qrClose.addEventListener('click', () => { els.qrModal.hidden = true; });
+
+  /* ---------- 타임라인 그리기 ---------- */
+  function contentSeconds() {
+    let m = state.duration || 10;
+    for (const c of state.clips) m = Math.max(m, c.start + c.duration);
+    return m + 3;
+  }
+
+  function laneWidth() { return Math.ceil(contentSeconds() * state.pps); }
+
+  function fitZoom() {
+    if (!state.duration) return;
+    const avail = els.tlScroll.clientWidth - HEAD_W - 60;
+    state.pps = clamp(avail / state.duration, 12, 300);
+  }
+
+  function renderTimeline() {
+    renderRuler();
+    renderVideoLane();
+    renderTracks();
+    updatePlayhead();
+  }
+
+  function renderRuler() {
+    const w = laneWidth();
+    els.ruler.style.width = `${w}px`;
+    els.ruler.innerHTML = '';
+    const steps = [1, 2, 5, 10, 15, 30, 60];
+    let step = steps.find((s) => s * state.pps >= 56) || 60;
+    const total = contentSeconds();
+    for (let t = 0; t <= total; t += step) {
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      tick.style.left = `${t * state.pps}px`;
+      tick.textContent = fmt(t);
+      els.ruler.appendChild(tick);
+    }
+    document.querySelectorAll('.lane').forEach((l) => {
+      l.style.width = `${w}px`;
+      l.style.backgroundSize = `${step * state.pps}px 100%`;
+    });
+  }
+
+  function renderVideoLane() {
+    const lane = els.videoLane;
+    lane.style.width = `${laneWidth()}px`;
+    lane.innerHTML = '';
+    if (!state.duration) {
+      const label = document.createElement('div');
+      label.className = 'video-label';
+      label.textContent = '영상을 가져오면 여기에 보여요';
+      lane.appendChild(label);
+      return;
+    }
+    if (state.thumbs.length) {
+      for (const th of state.thumbs) {
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = th.url;
+        img.draggable = false;
+        img.style.left = `${th.t * state.pps}px`;
+        img.style.width = `${Math.max(1, state.thumbInterval * state.pps)}px`;
+        lane.appendChild(img);
+      }
+    }
+    const bar = document.createElement('div');
+    bar.className = 'video-label';
+    bar.textContent = `🎬 ${state.videoName}`;
+    lane.appendChild(bar);
+    const endMark = document.createElement('div');
+    endMark.style.cssText = `position:absolute;top:0;bottom:0;left:${state.duration * state.pps}px;right:0;background:repeating-linear-gradient(45deg,#2a3040,#2a3040 8px,#1f2430 8px,#1f2430 16px);`;
+    lane.appendChild(endMark);
+  }
+
+  function renderTracks() {
+    const w = laneWidth();
+    els.tracks.innerHTML = '';
+    document.querySelectorAll('.lane').forEach((l) => { l.style.width = `${w}px`; });
+
+    for (const track of state.tracks) {
+      const row = document.createElement('div');
+      row.className = 'row track-row';
+      row.dataset.trackId = track.id;
+
+      // 머리 부분
+      const head = document.createElement('div');
+      head.className = 'track-head' + (track.id === state.selectedTrackId ? ' selected' : '');
+      head.style.borderLeft = `8px solid ${track.color}`;
+
+      const iconBtn = document.createElement('button');
+      iconBtn.className = 'icon-btn';
+      iconBtn.textContent = track.icon;
+      iconBtn.title = '그림 바꾸기';
+      iconBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.selectedTrackId = track.id;
+        openIconPicker(track);
+      });
+
+      const nameInput = document.createElement('input');
+      nameInput.className = 'track-name';
+      nameInput.value = track.name;
+      nameInput.maxLength = 12;
+      nameInput.title = '이름 바꾸기';
+      nameInput.addEventListener('change', () => {
+        track.name = nameInput.value.trim() || track.name;
+        nameInput.value = track.name;
+        updateRecordTarget();
+        saveProjectSoon();
+      });
+      nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') nameInput.blur(); });
+
+      const btns = document.createElement('div');
+      btns.className = 'track-btns';
+      const muteBtn = document.createElement('button');
+      muteBtn.className = 'mini-btn';
+      muteBtn.textContent = track.muted ? '🔇' : '🔊';
+      muteBtn.title = track.muted ? '소리 켜기' : '소리 끄기';
+      muteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        track.muted = !track.muted;
+        if (ctx) trackGain(track);
+        renderTracks();
+        saveProjectSoon();
+      });
+      btns.append(muteBtn);
+
+      head.append(iconBtn, nameInput, btns);
+      head.addEventListener('click', () => selectTrack(track.id));
+
+      // 레인
+      const lane = document.createElement('div');
+      lane.className = 'lane track-lane';
+      lane.style.width = `${w}px`;
+      lane.style.opacity = track.muted ? '0.45' : '1';
+      lane.addEventListener('click', (e) => {
+        if (e.target !== lane) return;
+        state.selectedTrackId = track.id;
+        state.selectedClipId = null;
+        seek((e.clientX - lane.getBoundingClientRect().left) / state.pps);
+        renderTracks();
+      });
+
+      for (const clip of state.clips.filter((c) => c.trackId === track.id)) {
+        lane.appendChild(makeClipEl(clip, track));
+      }
+
+      row.append(head, lane);
+      els.tracks.appendChild(row);
+    }
+
+    // 파형 그리기 (DOM에 붙은 뒤에 크기를 알 수 있음)
+    els.tracks.querySelectorAll('.clip').forEach((el) => drawWave(el, clipById(el.dataset.clipId)));
+
+    els.btnDelClip.disabled = !state.selectedClipId;
+    els.btnDelTrack.disabled = !selectedTrack();
+    updateRecordTarget();
+    renderRuler();
+  }
+
+  function updateRecordTarget() {
+    const t = selectedTrack();
+    els.recordTarget.textContent = t ? `${t.icon} ${t.name}` : '트랙을 골라요';
+  }
+
+  function makeClipEl(clip, track) {
+    const el = document.createElement('div');
+    el.className = 'clip' + (clip.id === state.selectedClipId ? ' selected' : '');
+    el.dataset.clipId = clip.id;
+    el.style.left = `${clip.start * state.pps}px`;
+    el.style.width = `${Math.max(8, clip.duration * state.pps)}px`;
+    el.style.background = track.color;
+    const canvas = document.createElement('canvas');
+    const label = document.createElement('span');
+    label.className = 'clip-label';
+    label.textContent = `${track.icon} ${clip.name}`;
+    el.append(canvas, label);
+    attachClipDrag(el, clip);
+    return el;
+  }
+
+  function drawWave(el, clip) {
+    if (!clip || !clip.peaks) return;
+    const canvas = el.querySelector('canvas');
+    const w = Math.max(1, el.clientWidth);
+    const h = Math.max(1, el.clientHeight);
+    canvas.width = w; canvas.height = h;
+    const c = canvas.getContext('2d');
+    c.clearRect(0, 0, w, h);
+    c.fillStyle = 'rgba(0,0,0,0.35)';
+    const n = clip.peaks.length;
+    const mid = h / 2;
+    for (let x = 0; x < w; x += 2) {
+      const p = clip.peaks[Math.floor((x / w) * n)] || 0;
+      const bh = Math.max(2, p * (h - 24));
+      c.fillRect(x, mid - bh / 2 + 6, 1.5, bh);
+    }
+  }
+
+  /* ---------- 클립 끌어서 옮기기 ---------- */
+  function attachClipDrag(el, clip) {
+    let startX = 0, origStart = 0, dragging = false, hoverRow = null;
+    el.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      e.stopPropagation();
+      startX = e.clientX;
+      origStart = clip.start;
+      dragging = false;
+      el.setPointerCapture(e.pointerId);
+      if (state.selectedClipId !== clip.id) selectClip(clip.id);
+    });
+    el.addEventListener('pointermove', (e) => {
+      if (!el.hasPointerCapture(e.pointerId)) return;
+      const dx = e.clientX - startX;
+      if (!dragging && Math.abs(dx) < 4) return;
+      dragging = true;
+      el.classList.add('dragging');
+      clip.start = Math.max(0, origStart + dx / state.pps);
+      el.style.left = `${clip.start * state.pps}px`;
+      // 다른 트랙 위에 있는지 확인
+      const row = document.elementsFromPoint(e.clientX, e.clientY).find((n) => n.classList && n.classList.contains('track-row'));
+      if (hoverRow && hoverRow !== row) hoverRow.classList.remove('drop-target');
+      hoverRow = row && row.dataset.trackId !== clip.trackId ? row : null;
+      if (hoverRow) hoverRow.classList.add('drop-target');
+    });
+    const finish = (e) => {
+      if (!el.hasPointerCapture(e.pointerId)) return;
+      el.releasePointerCapture(e.pointerId);
+      el.classList.remove('dragging');
+      if (hoverRow) {
+        hoverRow.classList.remove('drop-target');
+        clip.trackId = hoverRow.dataset.trackId;
+        state.selectedTrackId = clip.trackId;
+        hoverRow = null;
+      }
+      if (dragging) {
+        clip.start = Math.round(clip.start * 100) / 100;
+        if (state.playing) scheduleClips();
+        renderTracks();
+        saveProjectSoon();
+      }
+    };
+    el.addEventListener('pointerup', finish);
+    el.addEventListener('pointercancel', finish);
+  }
+
+  // 눈금자 / 영상 레인 클릭 → 이동
+  for (const lane of [els.ruler, els.videoLane]) {
+    lane.addEventListener('click', (e) => {
+      seek((e.clientX - lane.getBoundingClientRect().left) / state.pps);
+    });
+  }
+
+  els.btnZoomIn.addEventListener('click', () => { state.pps = clamp(state.pps * 1.4, 12, 400); renderTimeline(); });
+  els.btnZoomOut.addEventListener('click', () => { state.pps = clamp(state.pps / 1.4, 12, 400); renderTimeline(); });
+
+  /* ---------- 녹음 ---------- */
+  let mediaRecorder = null;
+  let micStream = null;
+  let recChunks = [];
+  let recStartTime = 0;
+  let recTrackId = null;
+  let armed = false;      // 카운트다운 중
+  let cancelArm = false;
+  let analyser = null;
+  let meterRaf = 0;
+  let recCounter = 0;
+
+  function setRecordUI(mode) {
+    els.btnRecord.classList.toggle('armed', mode === 'armed');
+    els.btnRecord.classList.toggle('recording', mode === 'recording');
+    els.recordLabel.textContent = mode === 'recording' ? '멈춤' : (mode === 'armed' ? '준비…' : '녹음');
+    els.recBadge.hidden = mode !== 'recording';
+    if (mode === 'idle') els.recordStatus.textContent = '버튼을 누르면 3초 뒤에 녹음이 시작돼요';
+    if (mode === 'armed') els.recordStatus.textContent = '준비! 곧 녹음이 시작돼요 🙌';
+    if (mode === 'recording') els.recordStatus.textContent = '녹음 중! 영상을 보면서 소리를 내요. 끝나면 멈춤 버튼을 눌러요';
+  }
+
+  function startMeter() {
+    if (!analyser) return;
+    const data = new Uint8Array(analyser.fftSize);
+    const loop = () => {
+      analyser.getByteTimeDomainData(data);
+      let max = 0;
+      for (let i = 0; i < data.length; i++) {
+        const v = Math.abs(data[i] - 128) / 128;
+        if (v > max) max = v;
+      }
+      els.meterFill.style.width = `${Math.min(100, max * 140)}%`;
+      meterRaf = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  function stopMeter() {
+    cancelAnimationFrame(meterRaf);
+    els.meterFill.style.width = '0%';
+  }
+
+  async function toggleRecord() {
+    if (state.exporting) return;
+    if (state.recording) { stopRecording(); return; }
+    if (armed) { cancelArm = true; return; }
+    if (!state.duration) { toast('먼저 영상을 가져와요! 🎬'); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+      toast('이 브라우저에서는 녹음을 할 수 없어요 😢');
+      return;
+    }
+    ensureAudio();
+    if (state.playing) pause();
+
+    let track = selectedTrack();
+    if (!track) track = addTrack();
+    recTrackId = track.id;
+
+    // 마이크 켜기
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true },
+      });
+    } catch (e) {
+      console.warn(e);
+      toast('마이크를 쓸 수 있게 허락해 주세요 🎤');
+      return;
+    }
+    const micSrc = ctx.createMediaStreamSource(micStream);
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    micSrc.connect(analyser);
+    startMeter();
+
+    // 카운트다운
+    armed = true;
+    cancelArm = false;
+    setRecordUI('armed');
+    els.countdown.hidden = false;
+    for (const n of [3, 2, 1]) {
+      els.countdown.textContent = String(n);
+      await wait(1000);
+      if (cancelArm) break;
+    }
+    els.countdown.hidden = true;
+    armed = false;
+    if (cancelArm) {
+      releaseMic();
+      setRecordUI('idle');
+      toast('녹음을 취소했어요');
+      return;
+    }
+
+    // 영상 끝이면 처음부터
+    if (els.video.ended || els.video.currentTime >= state.duration - 0.05) els.video.currentTime = 0;
+    recStartTime = els.video.currentTime;
+
+    recChunks = [];
+    const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus']
+      .find((m) => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m));
+    mediaRecorder = new MediaRecorder(micStream, mime ? { mimeType: mime } : undefined);
+    mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size) recChunks.push(e.data); };
+    mediaRecorder.onstop = onRecordingStopped;
+
+    // 녹음 중에는 스피커 소리를 꺼서 마이크에 섞이지 않게 함
+    master.gain.value = 0;
+    els.video.muted = true;
+
+    state.recording = true;
+    setRecordUI('recording');
+    keepAwake();
+    mediaRecorder.start(250);
+    els.video.play().catch((e) => console.warn(e));
+  }
+
+  function stopRecording() {
+    if (!state.recording) return;
+    state.recording = false;
+    els.video.pause();
+    try { mediaRecorder.stop(); } catch (e) { /* 이미 멈춤 */ }
+    master.gain.value = 1;
+    els.video.muted = !els.chkOriginal.checked;
+    setRecordUI('idle');
+  }
+
+  function releaseMic() {
+    stopMeter();
+    if (micStream) micStream.getTracks().forEach((t) => t.stop());
+    micStream = null;
+    analyser = null;
+  }
+
+  async function onRecordingStopped() {
+    releaseMic();
+    const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+    recChunks = [];
+    if (blob.size < 100) { toast('녹음된 소리가 없어요 😢'); return; }
+    const track = trackById(recTrackId) || addTrack();
+    recCounter += 1;
+    const name = `녹음 ${state.clips.length + 1}`;
+    const clip = await addClipFromBlob(blob, track.id, recStartTime, name);
+    if (clip) {
+      toast('녹음 완료! ▶ 눌러서 들어 봐요 🎉');
+      seek(recStartTime);
+    }
+  }
+
+  els.btnRecord.addEventListener('click', toggleRecord);
+
+  /* ---------- 작품 만들기 (영상 + 소리 → 하나의 영상 blob) ---------- */
+  /**
+   * 영상과 모든 트랙을 실시간으로 합쳐 blob으로 만든다.
+   * @param {{onProgress?: (p:number)=>void, cancelButton?: HTMLElement}} opts
+   * @returns {Promise<{blob: Blob, ext: string, thumbBlob: Blob|null, cancelled: boolean}>}
+   */
+  async function renderProject(opts = {}) {
+    ensureAudio();
+    pause();
+    state.exporting = true;
+    let cancelled = false;
+
+    // 처음으로 이동
+    await new Promise((r) => {
+      const done = () => { els.video.removeEventListener('seeked', done); r(); };
+      els.video.addEventListener('seeked', done);
+      els.video.currentTime = 0;
+      setTimeout(r, 1500);
+    });
+
+    const vw = els.video.videoWidth || 640;
+    const vh = els.video.videoHeight || 360;
+    const scale = Math.min(1, 1280 / vw);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(vw * scale);
+    canvas.height = Math.round(vh * scale);
+    const c2d = canvas.getContext('2d');
+
+    const vStream = canvas.captureStream(30);
+    const dest = ctx.createMediaStreamDestination();
+    master.connect(dest);
+    const stream = new MediaStream([...vStream.getVideoTracks(), ...dest.stream.getAudioTracks()]);
+
+    const mime = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4']
+      .find((m) => MediaRecorder.isTypeSupported(m));
+    const rec = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: 4_000_000 } : undefined);
+    const chunks = [];
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise((r) => { rec.onstop = r; });
+
+    let thumbBlob = null;
+    let thumbPending = false;
+    let raf = 0;
+    const draw = () => {
+      c2d.drawImage(els.video, 0, 0, canvas.width, canvas.height);
+      if (!thumbBlob && !thumbPending && els.video.currentTime > 0.4) {
+        thumbPending = true;
+        const tc = document.createElement('canvas');
+        tc.width = 320; tc.height = Math.round(320 * canvas.height / canvas.width);
+        tc.getContext('2d').drawImage(canvas, 0, 0, tc.width, tc.height);
+        tc.toBlob((b) => { thumbBlob = b; }, 'image/jpeg', 0.7);
+      }
+      if (opts.onProgress) opts.onProgress(els.video.currentTime / state.duration);
+      raf = requestAnimationFrame(draw);
+    };
+
+    await new Promise((resolve) => {
+      const onEnd = () => { cleanup(); resolve(); };
+      const onCancel = () => { cancelled = true; els.video.pause(); cleanup(); resolve(); };
+      const cleanup = () => {
+        els.video.removeEventListener('ended', onEnd);
+        if (opts.cancelButton) opts.cancelButton.removeEventListener('click', onCancel);
+      };
+      els.video.addEventListener('ended', onEnd);
+      if (opts.cancelButton) opts.cancelButton.addEventListener('click', onCancel);
+      rec.start(500);
+      draw();
+      els.video.play().catch((e) => { console.warn(e); onCancel(); });
+    });
+
+    cancelAnimationFrame(raf);
+    try { rec.stop(); } catch (e) { /* 이미 멈춤 */ }
+    await stopped;
+    try { master.disconnect(dest); } catch (e) { /* 무시 */ }
+    state.exporting = false;
+
+    const blob = new Blob(chunks, { type: rec.mimeType || 'video/webm' });
+    const ext = (rec.mimeType || '').includes('mp4') ? 'mp4' : 'webm';
+    return { blob, ext, thumbBlob, cancelled };
+  }
+
+  function canRender() {
+    if (!state.duration) { toast('먼저 영상을 가져와요! 🎬'); return false; }
+    if (state.recording || state.exporting) return false;
+    if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) {
+      toast('이 브라우저에서는 작품을 만들 수 없어요 😢');
+      return false;
+    }
+    return true;
+  }
+
+  /* ---------- 내 기기에 저장 ---------- */
+  async function exportProject() {
+    if (!canRender()) return;
+    els.exportProgress.style.width = '0%';
+    els.exportOverlay.hidden = false;
+    const result = await renderProject({
+      onProgress: (p) => { els.exportProgress.style.width = `${p * 100}%`; },
+      cancelButton: els.exportCancel,
+    });
+    els.exportOverlay.hidden = true;
+    if (result.cancelled) { toast('저장을 그만뒀어요'); return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(result.blob);
+    a.download = `폴리아티스트_작품.${result.ext}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    toast('작품을 저장했어요! 🎉', 3000);
+  }
+
+  els.btnExport.addEventListener('click', exportProject);
+
+  /* ---------- 패들렛 주소 ---------- */
+  const LS_PADLET = 'foley.padletUrl';
+  const lsGet = (k) => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* 무시 */ } };
+
+  function padletUrl() {
+    const u = lsGet(LS_PADLET);
+    return /^https:\/\//i.test(u) ? u : '';
+  }
+
+  // 주소에 ?padlet=... 이 있으면 저장 (선생님 QR로 들어온 경우)
+  try {
+    const qp = new URLSearchParams(location.search).get('padlet');
+    if (qp && /^https:\/\//i.test(qp)) lsSet(LS_PADLET, qp);
+  } catch (e) { /* 무시 */ }
+
+  /* ---------- 패들렛에 올리기 ---------- */
+  let lastFile = null;
+
+  function downloadFile(file) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+
+  async function sendToPadlet() {
+    if (!canRender()) return;
+
+    els.sendText.textContent = '🎬 작품을 만드는 중이에요… 영상이 끝날 때까지 기다려요';
+    els.sendProgress.style.width = '0%';
+    els.sendOverlay.hidden = false;
+    const result = await renderProject({
+      onProgress: (p) => { els.sendProgress.style.width = `${p * 100}%`; },
+      cancelButton: els.sendCancel,
+    });
+    els.sendOverlay.hidden = true;
+    if (result.cancelled) { toast('그만뒀어요'); return; }
+
+    const fileName = `폴리아티스트_작품.${result.ext}`;
+    lastFile = new File([result.blob], fileName, { type: result.blob.type || 'video/webm' });
+
+    // 공유 시트(패들렛 앱 등)를 쓸 수 있는지
+    let canShare = false;
+    try { canShare = !!(navigator.canShare && navigator.canShare({ files: [lastFile] })); } catch (e) { canShare = false; }
+
+    // 공유 시트가 없으면 파일을 먼저 기기에 저장해 둔다
+    if (!canShare) downloadFile(lastFile);
+
+    const url = padletUrl();
+    els.padletShare.hidden = !canShare;
+    els.padletOpen.hidden = !url;
+    if (url) els.padletOpen.href = url;
+    els.padletNolink.hidden = !!url;
+    els.padletModal.hidden = false;
+  }
+
+  els.padletShare.addEventListener('click', async () => {
+    if (!lastFile) return;
+    try {
+      await navigator.share({ files: [lastFile], title: lastFile.name });
+      toast('보냈어요! 🎉');
+    } catch (e) {
+      if (e && e.name !== 'AbortError') { downloadFile(lastFile); toast('공유가 안 돼서 파일로 저장했어요 💾'); }
+    }
+  });
+  els.padletSave.addEventListener('click', () => { if (lastFile) { downloadFile(lastFile); toast('파일을 저장했어요 💾'); } });
+  els.padletClose.addEventListener('click', () => { els.padletModal.hidden = true; });
+  els.btnSend.addEventListener('click', sendToPadlet);
+
+  /* ---------- 자동 저장 (IndexedDB) ---------- */
+  const DB_NAME = 'foley-artist';
+  const STORE = 'project';
+
+  function openDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  async function dbPut(key, value) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).put(value, key);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+  async function dbGet(key) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const req = db.transaction(STORE).objectStore(STORE).get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  async function dbDel(key) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).delete(key);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  let saveTimer = null;
+  function saveProjectSoon() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveProject, 800);
+  }
+
+  async function saveProject() {
+    if (!window.indexedDB) return;
+    try {
+      await dbPut('current', {
+        savedAt: Date.now(),
+        videoBlob: state.videoBlob,
+        videoName: state.videoName,
+        originalOn: els.chkOriginal.checked,
+        tracks: state.tracks.map((t) => ({ ...t })),
+        clips: state.clips.map((c) => ({
+          id: c.id, trackId: c.trackId, start: c.start, duration: c.duration, name: c.name, blob: c.blob,
+        })),
+      });
+    } catch (e) {
+      console.warn('자동 저장 실패', e);
+    }
+  }
+
+  async function restoreProject() {
+    if (!window.indexedDB) return false;
+    let data;
+    try { data = await dbGet('current'); } catch (e) { return false; }
+    if (!data || (!data.videoBlob && !data.clips.length)) return false;
+    const ok = await ask('지난번에 하던 작품이 있어요.\n이어서 할까요?', '이어서 하기', '새로 시작');
+    if (!ok) { await dbDel('current'); return false; }
+    ensureAudio();
+    state.tracks = data.tracks || [];
+    state.selectedTrackId = state.tracks[0] ? state.tracks[0].id : null;
+    els.chkOriginal.checked = data.originalOn !== false;
+    els.video.muted = !els.chkOriginal.checked;
+    for (const t of state.tracks) trackGain(t);
+    if (data.videoBlob) {
+      try { await loadVideo(data.videoBlob, data.videoName, { keepTracks: true, silent: true }); } catch (e) { /* 안내됨 */ }
+    }
+    for (const c of data.clips || []) {
+      try {
+        const buffer = await blobToBuffer(c.blob);
+        state.clips.push({ ...c, buffer, peaks: computePeaks(buffer) });
+      } catch (e) { console.warn('소리 복원 실패', e); }
+    }
+    renderTimeline();
+    toast('지난번 작품을 다시 불러왔어요 📂');
+    return true;
+  }
+
+  async function newProject() {
+    const ok = await ask('지금까지 만든 것을 모두 지우고 새로 시작할까요?', '새로 시작', '그대로 두기');
+    if (!ok) return;
+    if (state.recording) stopRecording();
+    pause();
+    stopClips();
+    if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
+    els.video.removeAttribute('src');
+    els.video.load();
+    Object.assign(state, {
+      videoBlob: null, videoName: '', videoUrl: '', duration: 0,
+      tracks: [], clips: [], selectedTrackId: null, selectedClipId: null, thumbs: [], pps: 60,
+    });
+    trackGains.clear();
+    els.videoEmpty.hidden = false;
+    els.timeDisplay.textContent = '0:00 / 0:00';
+    renderTimeline();
+    try { await dbDel('current'); } catch (e) { /* 무시 */ }
+    toast('새로 시작해요! 🧹');
+  }
+
+  els.btnNew.addEventListener('click', newProject);
+
+  /* ---------- 키보드 ---------- */
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+    if (!els.modal.hidden || !els.exportOverlay.hidden || !els.iconModal.hidden || !els.qrModal.hidden
+      || !els.padletModal.hidden || !els.sendOverlay.hidden) return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (state.recording) stopRecording();
+      else state.playing ? pause() : play();
+    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (state.selectedClipId) { e.preventDefault(); deleteSelectedClip(); }
+    } else if (e.key === 'Home') {
+      seek(0);
+    } else if (e.key === 'ArrowLeft') {
+      seek(els.video.currentTime - (e.shiftKey ? 1 : 0.1));
+    } else if (e.key === 'ArrowRight') {
+      seek(els.video.currentTime + (e.shiftKey ? 1 : 0.1));
+    }
+  });
+
+  // 첫 클릭 때 오디오 엔진 깨우기 (브라우저 자동재생 정책)
+  document.addEventListener('pointerdown', () => { if (ctx) ensureAudio(); }, { capture: true });
+
+  window.addEventListener('resize', () => renderTimeline());
+
+  /* ---------- 태블릿: 뒤로 가기·새로고침으로 작업이 날아가지 않게 ---------- */
+  function armBackTrap() {
+    try { history.pushState({ foley: true }, '', location.href); } catch (e) { /* 무시 */ }
+  }
+  armBackTrap();
+  armBackTrap();
+  window.addEventListener('popstate', () => {
+    armBackTrap();
+    if (!els.iconModal.hidden || !els.qrModal.hidden) {
+      els.iconModal.hidden = true; els.qrModal.hidden = true;
+      return;
+    }
+    toast('뒤로 가기 대신 화면의 버튼을 써요 😊 작업은 자동으로 저장돼요');
+  });
+  window.addEventListener('beforeunload', (e) => {
+    if (state.duration || state.clips.length) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+  // 길게 눌렀을 때 브라우저 메뉴가 뜨지 않게
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('input')) return;
+    e.preventDefault();
+  });
+
+  /* ---------- 시작 ---------- */
+  renderTimeline();
+  restoreProject();
+})();
+
+</script>
+</body>
+</html>

@@ -62,7 +62,18 @@
 
 ## 실행 방법
 
-마이크는 **https** 또는 **localhost** 에서만 사용할 수 있어요.
+### 가장 간단한 방법: 파일 하나로 열기
+저장소의 **`foley-artist.html`** 한 파일만 내려받아 더블클릭하면 바로 열립니다.
+(CSS·JS·QR 라이브러리가 모두 안에 들어 있는 단독 실행용 파일입니다. `index.html`만 받으면 꾸밈이 빠진 채 보이니 주의하세요.)
+크롬·엣지에서 마이크 녹음과 작품 저장까지 동작합니다. 내려받기: GitHub에서 파일을 연 뒤 오른쪽 위 **Download raw file**(↓) 버튼.
+
+`index.html`, `css/`, `js/`를 고친 뒤에는 아래 명령으로 단독 파일을 다시 만들어 함께 커밋합니다.
+```bash
+python3 scripts/build-standalone.py
+```
+
+### 여러 기기에서 쓰기 (배포)
+마이크는 **https** 또는 **localhost**, 또는 **파일 직접 열기** 에서만 사용할 수 있어요.
 
 - 가장 쉬운 방법: GitHub Pages 자동 배포. 저장소를 **Public**으로 바꾸면 푸시할 때마다
   `.github/workflows/pages.yml`이 https://pnoni2080.github.io/Foley-artist/ 에 배포합니다.
@@ -81,6 +92,8 @@ Chrome / Edge 최신 버전(크롬북 포함)을 권장합니다. 녹음·내보
 ## 파일 구성
 
 ```
+foley-artist.html     단독 실행용 한 파일(자동 생성, 직접 고치지 않음)
+scripts/build-standalone.py  단독 파일 생성 스크립트
 index.html            화면 구조
 css/style.css         스타일(어린이용 큰 버튼, 트랙 레이아웃)
 js/app.js             재생·녹음·타임라인·내보내기·자동 저장 로직
