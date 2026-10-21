@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>폴리 아티스트 - 영상에 소리 입히기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 상단 바 -->
+  <header class="topbar">
+    <div class="logo"><span class="logo-emoji">🎬🔊</span> 폴리 아티스트</div>
+    <div class="topbar-actions">
+      <button id="btn-open-video" class="btn btn-big btn-blue">🎬 영상 가져오기</button>
+      <button id="btn-export" class="btn btn-big btn-green">💾 작품 저장하기</button>
+      <button id="btn-new" class="btn btn-ghost">🧹 새로 시작</button>
+    </div>
+  </header>
+
+  <!-- 작업 공간: 좌측 영상, 우측 녹음 패널 -->
+  <main class="workspace">
+    <section class="video-area">
+      <div class="video-frame" id="video-frame">
+        <video id="video" playsinline preload="auto"></video>
+
+        <div class="video-empty" id="video-empty">
+          <div class="big-emoji">🎬</div>
+          <p class="empty-title">영상을 가져와서 시작해요!</p>
+          <button class="btn btn-big btn-blue" id="btn-open-video-2">🎬 영상 가져오기</button>
+          <p class="hint">영상 파일을 여기로 끌어다 놓아도 돼요</p>
+        </div>
+
+        <div class="countdown" id="countdown" hidden>3</div>
+        <div class="rec-badge" id="rec-badge" hidden>● 녹음 중</div>
+      </div>
+
+      <div class="transport">
+        <button id="btn-start" class="btn btn-round" title="처음으로">⏮</button>
+        <button id="btn-play" class="btn btn-round btn-play" title="재생">▶</button>
+        <div class="time" id="time-display">0:00 / 0:00</div>
+        <label class="toggle">
+          <input type="checkbox" id="chk-original" checked>
+          <span>🔊 영상 원래 소리</span>
+        </label>
+      </div>
+    </section>
+
+    <aside class="record-panel">
+      <h2>🎤 소리 녹음하기</h2>
+      <p class="record-target">녹음할 트랙: <span id="record-target">트랙을 골라요</span></p>
+
+      <button id="btn-record" class="record-btn" title="녹음">
+        <span class="mic">🎤</span>
+      </button>
+      <p id="record-status" class="record-status">버튼을 누르면 3초 뒤에 녹음이 시작돼요</p>
+
+      <div class="meter" title="마이크 소리 크기">
+        <div id="meter-fill" class="meter-fill"></div>
+      </div>
+
+      <div class="tips">
+        <div class="tip">1️⃣ 영상을 가져와요</div>
+        <div class="tip">2️⃣ 🎤 버튼을 누르고 영상을 보며 소리를 내요</div>
+        <div class="tip">3️⃣ 다시 🎤 버튼을 누르면 녹음 끝!</div>
+        <div class="tip">4️⃣ ▶ 재생해서 들어 봐요</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 하단 타임라인 -->
+  <section class="timeline-area">
+    <div class="timeline-toolbar">
+      <span class="tl-title">🎞 트랙</span>
+      <button id="btn-add-track" class="btn btn-small">➕ 트랙 추가</button>
+      <button id="btn-del-clip" class="btn btn-small btn-red" disabled>🗑 고른 소리 지우기</button>
+      <span class="spacer"></span>
+      <button id="btn-zoom-out" class="btn btn-small" title="작게 보기">🔍➖</button>
+      <button id="btn-zoom-in" class="btn btn-small" title="크게 보기">🔍➕</button>
+    </div>
+
+    <div class="timeline-scroll" id="timeline-scroll">
+      <div class="timeline-inner" id="timeline-inner">
+        <div class="row ruler-row">
+          <div class="track-head ruler-head">시간</div>
+          <div class="lane ruler" id="ruler"></div>
+        </div>
+        <div class="row video-row">
+          <div class="track-head video-head">🎬 영상</div>
+          <div class="lane video-lane" id="video-lane"></div>
+        </div>
+        <div id="tracks"></div>
+        <div class="row add-row">
+          <div class="track-head add-head">
+            <button id="btn-add-track-2" class="btn btn-small">➕ 트랙 추가</button>
+          </div>
+          <div class="lane add-lane"></div>
+        </div>
+        <div class="playhead" id="playhead"><div class="playhead-knob"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 물어보기 창 -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box">
+      <p id="modal-text" class="modal-text"></p>
+      <div class="modal-btns">
+        <button id="modal-ok" class="btn btn-big btn-blue">네</button>
+        <button id="modal-cancel" class="btn btn-big btn-ghost">아니요</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 내보내기 진행 창 -->
+  <div class="modal" id="export-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-text">⏳ 작품을 만드는 중이에요…<br><small>영상이 끝날 때까지 잠깐 기다려요</small></p>
+      <div class="progress"><div id="export-progress" class="progress-fill"></div></div>
+      <div class="modal-btns">
+        <button id="export-cancel" class="btn btn-ghost">그만두기</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <input type="file" id="file-input" accept="video/*" hidden>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
