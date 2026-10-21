@@ -17,6 +17,7 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  const APP_VERSION = '2026.10.21-9';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
@@ -1467,6 +1468,8 @@
   });
 
   /* ---------- 시작 ---------- */
+  const verEl = document.getElementById('app-version');
+  if (verEl) verEl.textContent = APP_VERSION;
   renderTimeline();
   restoreProject();
 })();
