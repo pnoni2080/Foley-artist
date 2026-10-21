@@ -331,6 +331,7 @@ input { font: inherit; }
 .qr-code { display: grid; place-items: center; background: #fff; padding: 8px; border-radius: 12px; }
 .qr-code svg { width: min(60vw, 320px); height: auto; }
 .qr-url-label { font-size: 14px; color: var(--muted); align-self: flex-start; }
+.qr-warn { margin: 0; font-size: 15px; line-height: 1.5; background: #fff7cc; border-radius: 12px; padding: 10px 14px; text-align: left; }
 .qr-url { width: 100%; font-size: 15px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; -webkit-user-select: text; user-select: text; }
 .padlet-box { max-width: 480px; }
 .steps { margin: 0; padding-left: 26px; font-size: 18px; line-height: 1.8; align-self: stretch; }

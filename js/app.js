@@ -56,6 +56,7 @@
     qrCode: $('#qr-code'),
     qrUrl: $('#qr-url'),
     qrClose: $('#qr-close'),
+    qrWarn: $('#qr-warn'),
     btnSend: $('#btn-send'),
     recordLabel: $('#record-label'),
     padletModal: $('#padlet-modal'),
@@ -560,7 +561,8 @@
   function renderQr() {
     const url = qrTargetUrl();
     els.qrCode.innerHTML = '';
-    if (!url || typeof qrcode !== 'function') return;
+    if (!url || typeof qrcode !== 'function') { els.qrCode.textContent = '주소를 적으면 QR이 여기에 나와요'; return; }
+    if (!isShareableUrl(url)) { els.qrCode.textContent = 'https:// 로 시작하는 인터넷 주소를 적어요'; return; }
     try {
       const qr = qrcode(0, 'M');
       qr.addData(url);
@@ -570,13 +572,26 @@
       els.qrCode.textContent = '주소가 너무 길어요';
     }
   }
+  const LS_APP_URL = 'foley.appUrl';
+  // 다른 기기가 들어올 수 있는 주소인지 (내 컴퓨터 파일이나 localhost는 안 됨)
+  function isShareableUrl(u) {
+    try {
+      const x = new URL(u);
+      if (!/^https?:$/.test(x.protocol)) return false;
+      if (/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(x.hostname)) return false;
+      return true;
+    } catch (e) { return false; }
+  }
   els.btnQr.addEventListener('click', () => {
-    if (!els.qrUrl.value) els.qrUrl.value = location.href.split('#')[0].split('?')[0];
+    const here = location.href.split('#')[0].split('?')[0];
+    const saved = lsGet(LS_APP_URL);
+    if (!els.qrUrl.value) els.qrUrl.value = isShareableUrl(here) ? here : saved;
     if (!els.qrPadlet.value) els.qrPadlet.value = padletUrl();
+    els.qrWarn.hidden = isShareableUrl(here);
     renderQr();
     els.qrModal.hidden = false;
   });
-  els.qrUrl.addEventListener('input', renderQr);
+  els.qrUrl.addEventListener('input', () => { lsSet(LS_APP_URL, els.qrUrl.value.trim()); renderQr(); });
   els.qrPadlet.addEventListener('input', () => { lsSet(LS_PADLET, els.qrPadlet.value.trim()); renderQr(); });
   els.qrClose.addEventListener('click', () => { els.qrModal.hidden = true; });
 
