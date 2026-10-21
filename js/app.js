@@ -49,6 +49,7 @@
     btnDelClip: $('#btn-del-clip'),
     btnDelTrack: $('#btn-del-track'),
     btnQr: $('#btn-qr'),
+    btnFullscreen: $('#btn-fullscreen'),
     iconModal: $('#icon-modal'),
     iconGrid: $('#icon-grid'),
     iconCancel: $('#icon-cancel'),
@@ -60,7 +61,6 @@
     btnSend: $('#btn-send'),
     recordLabel: $('#record-label'),
     padletModal: $('#padlet-modal'),
-    padletShare: $('#padlet-share'),
     padletOpen: $('#padlet-open'),
     padletSave: $('#padlet-save'),
     padletNolink: $('#padlet-nolink'),
@@ -163,8 +163,11 @@
       src.buffer = c.buffer;
       src.connect(trackGain(track));
       const when = base + Math.max(0, c.start - t0);
-      const offset = Math.max(0, t0 - c.start);
-      src.start(when, offset);
+      const skip = Math.max(0, t0 - c.start);           // 클립 안에서 이미 지난 시간
+      const off = (c.offset || 0) + skip;                // 버퍼에서 시작할 위치
+      const remain = c.duration - skip;                  // 남은 재생 길이
+      if (remain <= 0.01) continue;
+      src.start(when, off, remain);
       activeSources.push(src);
     }
   }
@@ -188,18 +191,23 @@
     const peaks = new Float32Array(count);
     const channels = [];
     for (let ch = 0; ch < buffer.numberOfChannels; ch++) channels.push(buffer.getChannelData(ch));
+    let top = 0;
     for (let i = 0; i < count; i++) {
       const s0 = i * step;
       const s1 = Math.min(len, s0 + step);
       let max = 0;
       for (const data of channels) {
-        for (let j = s0; j < s1; j += 4) {
+        for (let j = s0; j < s1; j += 2) {
           const v = Math.abs(data[j]);
           if (v > max) max = v;
         }
       }
       peaks[i] = max;
+      if (max > top) top = max;
     }
+    // 작게 녹음돼도 파형이 보이도록 가장 큰 소리를 기준으로 키움
+    const scale = top > 0.02 ? 1 / top : 1;
+    for (let i = 0; i < count; i++) peaks[i] = Math.min(1, peaks[i] * scale);
     return peaks;
   }
 
@@ -342,6 +350,9 @@
           d = 0;
         }
         state.duration = d;
+        if (els.video.videoWidth && els.video.videoHeight) {
+          document.documentElement.style.setProperty('--video-ar', `${els.video.videoWidth} / ${els.video.videoHeight}`);
+        }
         els.videoEmpty.hidden = true;
         if (!opts.keepTracks && state.tracks.length === 0) addTrack();
         fitZoom();
@@ -493,7 +504,9 @@
       id: uid(),
       trackId,
       start: Math.max(0, start),
+      offset: 0,
       duration: buffer.duration,
+      fullDuration: buffer.duration,
       name,
       blob,
       buffer,
@@ -582,6 +595,31 @@
       return true;
     } catch (e) { return false; }
   }
+  function isFullscreen() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  async function toggleFullscreen() {
+    const el = document.documentElement;
+    try {
+      if (isFullscreen()) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } else if (el.requestFullscreen) {
+        await el.requestFullscreen({ navigationUI: 'hide' });
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else {
+        toast('이 브라우저는 전체 화면을 지원하지 않아요. 홈 화면에 추가하면 전체 화면으로 열려요');
+      }
+    } catch (e) {
+      toast('전체 화면으로 바꾸지 못했어요. 홈 화면에 추가하면 전체 화면으로 열려요');
+    }
+  }
+  function updateFullscreenBtn() {
+    els.btnFullscreen.textContent = isFullscreen() ? '🗗 전체 화면 끝' : '⛶ 전체 화면';
+  }
+  els.btnFullscreen.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', updateFullscreenBtn);
+  document.addEventListener('webkitfullscreenchange', updateFullscreenBtn);
+
   els.btnQr.addEventListener('click', () => {
     const here = location.href.split('#')[0].split('?')[0];
     const saved = lsGet(LS_APP_URL);
@@ -770,8 +808,19 @@
     const label = document.createElement('span');
     label.className = 'clip-label';
     label.textContent = `${track.icon} ${clip.name}`;
-    el.append(canvas, label);
+    const time = document.createElement('span');
+    time.className = 'clip-time';
+    time.textContent = `${clip.duration.toFixed(1)}초`;
+    const hl = document.createElement('div');
+    hl.className = 'clip-handle left';
+    hl.title = '앞부분 자르기';
+    const hr = document.createElement('div');
+    hr.className = 'clip-handle right';
+    hr.title = '뒷부분 자르기';
+    el.append(canvas, label, time, hl, hr);
     attachClipDrag(el, clip);
+    attachTrim(el, hl, clip, 'left');
+    attachTrim(el, hr, clip, 'right');
     return el;
   }
 
@@ -783,14 +832,67 @@
     canvas.width = w; canvas.height = h;
     const c = canvas.getContext('2d');
     c.clearRect(0, 0, w, h);
-    c.fillStyle = 'rgba(0,0,0,0.35)';
     const n = clip.peaks.length;
-    const mid = h / 2;
+    const full = clip.fullDuration || clip.duration || 1;
+    const from = (clip.offset || 0) / full;          // 버퍼에서 보이는 구간
+    const to = ((clip.offset || 0) + clip.duration) / full;
+    const mid = h / 2 + 6;
+    const maxH = h - 26;
+    c.fillStyle = 'rgba(0,0,0,0.42)';
     for (let x = 0; x < w; x += 2) {
-      const p = clip.peaks[Math.floor((x / w) * n)] || 0;
-      const bh = Math.max(2, p * (h - 24));
-      c.fillRect(x, mid - bh / 2 + 6, 1.5, bh);
+      const pos = from + (x / w) * (to - from);
+      const p = clip.peaks[Math.min(n - 1, Math.floor(pos * n))] || 0;
+      const bh = Math.max(3, p * maxH);
+      c.fillRect(x, mid - bh / 2, 1.6, bh);
     }
+    c.fillStyle = 'rgba(0,0,0,0.25)';
+    c.fillRect(0, mid - 0.5, w, 1);
+  }
+
+  /* ---------- 클립 길이 자르기 (손잡이 끌기) ---------- */
+  const MIN_CLIP = 0.2;
+  function attachTrim(el, handle, clip, side) {
+    let startX = 0;
+    let orig = null;
+    handle.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      startX = e.clientX;
+      orig = { start: clip.start, offset: clip.offset || 0, duration: clip.duration };
+      handle.setPointerCapture(e.pointerId);
+      el.classList.add('trimming');
+      if (state.selectedClipId !== clip.id) selectClip(clip.id);
+    });
+    handle.addEventListener('pointermove', (e) => {
+      if (!handle.hasPointerCapture(e.pointerId) || !orig) return;
+      const dt = (e.clientX - startX) / state.pps;
+      const full = clip.fullDuration || orig.offset + orig.duration;
+      if (side === 'right') {
+        clip.duration = clamp(orig.duration + dt, MIN_CLIP, full - orig.offset);
+      } else {
+        const d = clamp(dt, -orig.offset, orig.duration - MIN_CLIP);
+        clip.offset = orig.offset + d;
+        clip.start = Math.max(0, orig.start + d);
+        clip.duration = orig.duration - d;
+      }
+      el.style.left = `${clip.start * state.pps}px`;
+      el.style.width = `${Math.max(8, clip.duration * state.pps)}px`;
+      el.querySelector('.clip-time').textContent = `${clip.duration.toFixed(1)}초`;
+      drawWave(el, clip);
+    });
+    const finish = (e) => {
+      if (!handle.hasPointerCapture(e.pointerId)) return;
+      handle.releasePointerCapture(e.pointerId);
+      el.classList.remove('trimming');
+      orig = null;
+      clip.start = Math.round(clip.start * 100) / 100;
+      clip.duration = Math.round(clip.duration * 100) / 100;
+      clip.offset = Math.round((clip.offset || 0) * 100) / 100;
+      if (state.playing) scheduleClips();
+      renderTracks();
+      saveProjectSoon();
+    };
+    handle.addEventListener('pointerup', finish);
+    handle.addEventListener('pointercancel', finish);
   }
 
   /* ---------- 클립 끌어서 옮기기 ---------- */
@@ -1159,30 +1261,16 @@
     const fileName = `폴리아티스트_작품.${result.ext}`;
     lastFile = new File([result.blob], fileName, { type: result.blob.type || 'video/webm' });
 
-    // 공유 시트(패들렛 앱 등)를 쓸 수 있는지
-    let canShare = false;
-    try { canShare = !!(navigator.canShare && navigator.canShare({ files: [lastFile] })); } catch (e) { canShare = false; }
-
-    // 공유 시트가 없으면 파일을 먼저 기기에 저장해 둔다
-    if (!canShare) downloadFile(lastFile);
+    // 파일을 기기에 저장해 두고, 패들렛에서 올리도록 안내
+    downloadFile(lastFile);
 
     const url = padletUrl();
-    els.padletShare.hidden = !canShare;
     els.padletOpen.hidden = !url;
     if (url) els.padletOpen.href = url;
     els.padletNolink.hidden = !!url;
     els.padletModal.hidden = false;
   }
 
-  els.padletShare.addEventListener('click', async () => {
-    if (!lastFile) return;
-    try {
-      await navigator.share({ files: [lastFile], title: lastFile.name });
-      toast('보냈어요! 🎉');
-    } catch (e) {
-      if (e && e.name !== 'AbortError') { downloadFile(lastFile); toast('공유가 안 돼서 파일로 저장했어요 💾'); }
-    }
-  });
   els.padletSave.addEventListener('click', () => { if (lastFile) { downloadFile(lastFile); toast('파일을 저장했어요 💾'); } });
   els.padletClose.addEventListener('click', () => { els.padletModal.hidden = true; });
   els.btnSend.addEventListener('click', sendToPadlet);
@@ -1242,7 +1330,8 @@
         originalOn: els.chkOriginal.checked,
         tracks: state.tracks.map((t) => ({ ...t })),
         clips: state.clips.map((c) => ({
-          id: c.id, trackId: c.trackId, start: c.start, duration: c.duration, name: c.name, blob: c.blob,
+          id: c.id, trackId: c.trackId, start: c.start, offset: c.offset || 0, duration: c.duration,
+          fullDuration: c.fullDuration || c.duration, name: c.name, blob: c.blob,
         })),
       });
     } catch (e) {
@@ -1269,7 +1358,10 @@
     for (const c of data.clips || []) {
       try {
         const buffer = await blobToBuffer(c.blob);
-        state.clips.push({ ...c, buffer, peaks: computePeaks(buffer) });
+        const fullDuration = buffer.duration;
+        const offset = clamp(c.offset || 0, 0, fullDuration);
+        const duration = clamp(c.duration || fullDuration, MIN_CLIP, fullDuration - offset);
+        state.clips.push({ ...c, offset, duration, fullDuration, buffer, peaks: computePeaks(buffer) });
       } catch (e) { console.warn('소리 복원 실패', e); }
     }
     renderTimeline();
