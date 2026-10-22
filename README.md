@@ -92,6 +92,14 @@ python3 scripts/build-standalone.py
 Chrome / Edge 최신 버전(크롬북 포함)을 권장합니다. 녹음·내보내기는 `MediaRecorder`를 사용하며, Safari는 MP4로 내보냅니다.
 녹음 중에는 마이크에 스피커 소리가 섞이지 않도록 영상 소리와 다른 트랙 소리를 잠시 끕니다.
 
+## 디자인 재료
+
+효과음(Howler.js), 움직임(GSAP), 축하 효과(tsParticles confetti), 아이콘(Phosphor, Fluent Emoji Flat)을 씁니다.
+자세한 라이선스는 `THIRD_PARTY.md`에 있습니다. 효과음은 재생 줄의 **효과음** 스위치로 끌 수 있고, 녹음 중에는 울리지 않습니다.
+
+- Kenney 효과음·징글(CC0): `assets/sounds/`의 같은 이름 파일로 바꿔 넣으면 됩니다(지금은 임시 전자음).
+- 카카오 큰글씨: `assets/fonts/`에 넣으면 자동 적용됩니다(없으면 Noto Sans KR).
+
 ## 파일 구성
 
 ```
@@ -100,7 +108,12 @@ scripts/build-standalone.py  단독 파일 생성 스크립트
 index.html            화면 구조
 css/style.css         스타일(어린이용 큰 버튼, 트랙 레이아웃)
 js/app.js             재생·녹음·타임라인·내보내기·자동 저장 로직
-js/vendor/qrcode.js   QR 생성 라이브러리 (qrcode-generator, MIT)
+js/vendor/            qrcode.js, gsap.min.js, howler.min.js, tsparticles.confetti.bundle.min.js
+js/icons.js           Phosphor·Fluent Emoji 아이콘 데이터(필요한 것만 추출)
+js/fx.js              효과음·움직임·축하 효과·아이콘 적용
+assets/sounds/        효과음 (임시 전자음, Kenney 파일로 교체 가능)
+assets/fonts/         카카오 큰글씨 자리
+THIRD_PARTY.md        외부 재료 라이선스
 manifest.webmanifest  홈 화면에 추가용 앱 정보
 icons/                앱 아이콘
 ```

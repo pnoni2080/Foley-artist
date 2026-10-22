@@ -17,8 +17,11 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const APP_VERSION = '2026.10.21-13';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
+  const APP_VERSION = '2026.10.22-14';   // 수정할 때마다 올림. QR 창에 표시돼 어떤 판인지 확인용
   const HEAD_W = 190;
+  const FX = window.FoleyFX || null;                 // 효과음·움직임 (없어도 동작)
+  const ph = (n, c) => (window.phIcon ? window.phIcon(n, c) : '');
+  const emo = (ch, c) => (window.emojiIcon ? window.emojiIcon(ch, c) : ch);
   const TRACK_ICONS = ['🎤', '🥁', '👏', '👣', '🐶', '🐱', '🚗', '🌧️', '🔔', '💥', '🎵', '🐦'];
   // 그림 고르기 창에 나오는 전체 목록
   const ICON_CHOICES = [
@@ -45,6 +48,8 @@
     btnStart: $('#btn-start'),
     timeDisplay: $('#time-display'),
     chkOriginal: $('#chk-original'),
+    chkFx: $('#chk-fx'),
+    fullscreenLabel: $('#fullscreen-label'),
     btnRecord: $('#btn-record'),
     recordStatus: $('#record-status'),
     soundList: $('#sound-list'),
@@ -271,6 +276,7 @@
   function toast(msg, ms = 2200) {
     els.toast.textContent = msg;
     els.toast.hidden = false;
+    if (FX) FX.toastIn(els.toast);
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { els.toast.hidden = true; }, ms);
   }
@@ -364,6 +370,10 @@
   els.btnPlay.addEventListener('click', () => (state.playing ? pause() : play()));
   els.btnStart.addEventListener('click', () => seek(0));
   els.chkOriginal.addEventListener('change', applyOriginal);
+  if (FX) {
+    els.chkFx.checked = FX.isOn();
+    els.chkFx.addEventListener('change', () => { FX.setFx(els.chkFx.checked); if (els.chkFx.checked) FX.play('click'); });
+  }
 
   function applyOriginal() {
     els.video.muted = !els.chkOriginal.checked;
@@ -601,6 +611,7 @@
     state.sounds.push(sound);
     state.selectedSoundId = null;
     renderSounds();
+    if (FX) { FX.slideIn(els.soundList.lastElementChild); FX.celebrate('small'); }
     renderTracks();
     saveProjectSoon();
     return sound;
@@ -663,12 +674,12 @@
       meta.textContent = `${sound.duration.toFixed(1)}초` + (placed ? ` · 트랙 ${placed}` : '');
       const play = document.createElement('button');
       play.className = 'sound-btn';
-      play.textContent = '▶';
+      play.innerHTML = ph('play-fill');
       play.title = '들어 보기';
       play.addEventListener('click', (e) => { e.stopPropagation(); previewSound(sound); });
       const del = document.createElement('button');
       del.className = 'sound-btn';
-      del.textContent = '🗑';
+      del.innerHTML = ph('trash-fill');
       del.title = '목록에서 지우기';
       del.addEventListener('click', (e) => { e.stopPropagation(); deleteSound(sound.id); });
       const text = document.createElement('div');
@@ -706,6 +717,7 @@
     if (state.playing) scheduleClips();
     renderSounds();
     renderTracks();
+    if (FX) FX.pop(els.tracks.querySelector(`.clip[data-clip-id="${clip.id}"]`), { transformOrigin: 'left center' });
     saveProjectSoon();
     seek(clip.start);
     toast(`"${track.name}" 트랙에 넣었어요 🎵`);
@@ -741,7 +753,7 @@
     for (const icon of ICON_CHOICES) {
       const b = document.createElement('button');
       b.className = 'icon-choice' + (icon === track.icon ? ' current' : '');
-      b.textContent = icon;
+      b.innerHTML = emo(icon);
       b.addEventListener('click', () => {
         track.icon = icon;
         els.iconModal.hidden = true;
@@ -806,7 +818,9 @@
     }
   }
   function updateFullscreenBtn() {
-    els.btnFullscreen.textContent = isFullscreen() ? '🗗 전체 화면 끝' : '⛶ 전체 화면';
+    els.fullscreenLabel.textContent = isFullscreen() ? '전체 화면 끝' : '전체 화면';
+    const ic = els.btnFullscreen.querySelector('svg');
+    if (ic) ic.outerHTML = ph(isFullscreen() ? 'corners-in-bold' : 'corners-out-bold');
   }
   els.btnFullscreen.addEventListener('click', toggleFullscreen);
   document.addEventListener('fullscreenchange', updateFullscreenBtn);
@@ -915,7 +929,7 @@
 
       const iconBtn = document.createElement('button');
       iconBtn.className = 'icon-btn';
-      iconBtn.textContent = track.icon;
+      iconBtn.innerHTML = emo(track.icon);
       iconBtn.title = '그림 바꾸기';
       iconBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -939,7 +953,7 @@
       btns.className = 'track-btns';
       const muteBtn = document.createElement('button');
       muteBtn.className = 'mini-btn';
-      muteBtn.textContent = track.muted ? '🔇' : '🔊';
+      muteBtn.innerHTML = ph(track.muted ? 'speaker-slash-fill' : 'speaker-high-fill');
       muteBtn.title = track.muted ? '소리 켜기' : '소리 끄기';
       muteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -993,7 +1007,7 @@
     const canvas = document.createElement('canvas');
     const label = document.createElement('span');
     label.className = 'clip-label';
-    label.textContent = `${track.icon} ${clip.name}`;
+    label.innerHTML = `${emo(track.icon)}<span>${clip.name}</span>`;
     const time = document.createElement('span');
     time.className = 'clip-time';
     time.textContent = `${clip.duration.toFixed(1)}초`;
@@ -1150,6 +1164,8 @@
   let meterRaf = 0;
 
   function setRecordUI(mode) {
+    document.body.classList.toggle('is-recording', mode === 'recording');
+    document.body.classList.toggle('is-armed', mode === 'armed');
     els.btnRecord.classList.toggle('armed', mode === 'armed');
     els.btnRecord.classList.toggle('recording', mode === 'recording');
     els.recordLabel.textContent = mode === 'recording' ? '멈춤' : (mode === 'armed' ? '준비…' : '녹음');
@@ -1233,6 +1249,7 @@
     els.countdown.hidden = false;
     for (const n of [3, 2, 1]) {
       els.countdown.textContent = String(n);
+      if (FX) { FX.countdownPop(els.countdown); FX.play('tick'); }
       await wait(1000);
       if (cancelArm) break;
     }
@@ -1262,6 +1279,7 @@
 
     state.recording = true;
     setRecordUI('recording');
+    if (FX) { FX.play('go'); FX.bounce(els.btnRecord); }
     keepAwake();
     mediaRecorder.start(250);
     els.video.play().catch((e) => console.warn(e));
@@ -1273,6 +1291,7 @@
     els.video.pause();
     try { mediaRecorder.stop(); } catch (e) { /* 이미 멈춤 */ }
     master.gain.value = 1;
+    if (FX) FX.play('stop');
     els.video.muted = !els.chkOriginal.checked;
     setRecordUI('idle');
   }
@@ -1421,6 +1440,7 @@
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 10000);
     toast('작품을 저장했어요! 🎉', 3000);
+    if (FX) { FX.play('success'); FX.celebrate('big'); }
   }
 
   els.btnExport.addEventListener('click', exportProject);
@@ -1478,6 +1498,7 @@
     if (url) els.padletOpen.href = url;
     els.padletNolink.hidden = !!url;
     els.padletModal.hidden = false;
+    if (FX) { FX.play('success'); FX.celebrate('big'); }
   }
 
   els.padletSave.addEventListener('click', () => { if (lastFile) { downloadFile(lastFile); toast('파일을 저장했어요 💾'); } });

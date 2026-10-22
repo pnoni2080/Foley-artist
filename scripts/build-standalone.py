@@ -9,10 +9,17 @@ html = (root / "index.html").read_text(encoding="utf-8")
 
 def inline_css(m):
     css = (root / m.group(1)).read_text(encoding="utf-8")
+    css = css.replace('url("../assets/', 'url("assets/')   # CSS가 HTML 안으로 들어오므로 경로 보정
     return "<style>\n" + css + "\n</style>"
+
+def sound_data_uri(path):
+    data = (root / path).read_bytes()
+    return "data:audio/ogg;base64," + base64.b64encode(data).decode()
 
 def inline_js(m):
     js = (root / m.group(1)).read_text(encoding="utf-8")
+    # 효과음은 파일 하나로도 울리도록 data URI로 묶음
+    js = re.sub(r"'(assets/sounds/[^']+\.ogg)'", lambda mm: "'" + sound_data_uri(mm.group(1)) + "'", js)
     if "</script" in js:
         sys.exit(f"{m.group(1)} 안에 </script> 문자열이 있어 인라인할 수 없어요")
     return "<script>\n" + js + "\n</script>"
