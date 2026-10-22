@@ -126,7 +126,8 @@ input { font: inherit; }
   border-bottom: 2px solid var(--line);
 }
 .logo { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; white-space: nowrap; display: flex; align-items: center; gap: 10px; font-family: var(--font-display); }
-.logo-3d { width: 64px; height: auto; display: block; filter: drop-shadow(0 4px 6px rgba(31, 42, 68, 0.18)); }
+.logo-mark { display: inline-flex; align-items: center; background: var(--blue-soft); border-radius: 14px; padding: 4px 8px; gap: 2px; }
+.logo-mark .ic { width: 28px; height: 28px; }
 .logo-text { background: linear-gradient(90deg, var(--blue-dark), var(--purple)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .topbar-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 
@@ -167,7 +168,6 @@ input { font: inherit; }
   background: linear-gradient(160deg, #2b3a67, #1b2440);
 }
 .big-emoji { font-size: 72px; line-height: 1; }
-.empty-3d { width: min(220px, 40%); height: auto; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.35)); }
 .empty-title { font-size: 24px; font-weight: 700; margin: 0; }
 .hint { color: #aab5d4; font-size: 15px; margin: 0; }
 
@@ -203,7 +203,6 @@ input { font: inherit; }
   .btn-big { font-size: 17px; padding: 11px 18px; min-height: 48px; }
   .topbar-actions { gap: 8px; }
   .logo { font-size: 22px; }
-  .logo-3d { width: 52px; }
   .time { font-size: 20px; min-width: 100px; }
 }
 .time { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; min-width: 120px; }

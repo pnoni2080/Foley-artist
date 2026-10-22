@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="폴리 아티스트">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon3d-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon3d-180.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
   <title>폴리 아티스트 - 영상에 소리 입히기</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
 
   <!-- 상단 바 -->
   <header class="topbar">
-    <div class="logo"><img class="logo-3d" src="icons/logo3d-256.png" alt="" width="64" height="45"><span class="logo-text">폴리 아티스트</span></div>
+    <div class="logo"><span class="logo-mark"><i data-emoji="🎬"></i><i data-emoji="🔊"></i></span><span class="logo-text">폴리 아티스트</span></div>
     <div class="topbar-actions">
       <button id="btn-open-video" class="btn btn-big btn-blue"><i data-emoji="🎬"></i>영상 가져오기</button>
       <button id="btn-send" class="btn btn-big btn-green"><i data-emoji="📤"></i>패들렛에 올리기</button>
@@ -39,7 +39,7 @@
         <video id="video" playsinline preload="auto"></video>
 
         <div class="video-empty" id="video-empty">
-          <img class="empty-3d" src="icons/tile3d-512.png" alt="" width="220" height="220">
+          <div class="big-emoji"><i data-emoji="🎬"></i></div>
           <p class="empty-title">영상을 가져와서 시작해요!</p>
           <button class="btn btn-big btn-blue" id="btn-open-video-2"><i data-emoji="🎬"></i>영상 가져오기</button>
           <p class="hint">영상 파일을 여기로 끌어다 놓아도 돼요</p>

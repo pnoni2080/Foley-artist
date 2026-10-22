@@ -32,12 +32,7 @@ html = re.sub(r'\s*<link rel="manifest"[^>]*>', "", html)
 html = re.sub(r'\s*<link rel="apple-touch-icon"[^>]*>', "", html)
 svg = (root / "icons/icon.svg").read_bytes()
 data = "data:image/svg+xml;base64," + base64.b64encode(svg).decode()
-html = re.sub(r'<link rel="icon" href="[^"]+" type="image/(?:svg\+xml|png)">', f'<link rel="icon" href="{data}">', html)
-
-def png_uri(m):
-    p = root / m.group(1)
-    return 'src="data:image/png;base64,' + base64.b64encode(p.read_bytes()).decode() + '"'
-html = re.sub(r'src="(icons/[^"]+\.png)"', png_uri, html)
+html = re.sub(r'<link rel="icon" href="[^"]+" type="image/svg\+xml">', f'<link rel="icon" href="{data}">', html)
 
 html = html.replace("<head>", "<head>\n  <!-- 이 파일은 scripts/build-standalone.py 로 만들어진 단독 실행용입니다. 수정은 index.html / css / js 에서 하세요. -->", 1)
 out = root / "foley-artist.html"
